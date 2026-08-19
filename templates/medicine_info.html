@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedMatch AI - Medicine Information</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #eef2ff, #f8f9ff);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 85%;
+            max-width: 800px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #4b3f72;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        input {
+            flex: 1;
+            padding: 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 14px 22px;
+            background: #5b4b8a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #46386f;
+        }
+
+        .info-card {
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 25px;
+            background: #fafafa;
+        }
+
+        .info-card h2 {
+            color: #4b3f72;
+            margin-top: 0;
+        }
+
+        .info-item {
+            margin: 15px 0;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .info-item strong {
+            color: #444;
+        }
+
+        .not-found {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            background: #fafafa;
+            border-radius: 10px;
+        }
+
+        .note {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 13px;
+            color: #777;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #5b4b8a;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>💊 Medicine Information</h1>
+
+    <p class="subtitle">
+        Get simple information from the MedMatch AI demo database
+    </p>
+
+    <form action="/medicine-info" method="POST">
+
+        <input
+            type="text"
+            name="medicine"
+            placeholder="Enter medicine name"
+            value="{{ medicine if medicine else '' }}"
+            required
+        >
+
+        <button type="submit">
+            🔎 Search
+        </button>
+
+    </form>
+
+
+    {% if result %}
+
+        <div class="info-card">
+
+            <h2>
+                💊 {{ medicine|title }}
+            </h2>
+
+            {% if result is mapping %}
+
+                {% for key, value in result.items() %}
+
+                    <div class="info-item">
+                        <strong>{{ key|replace("_", " ")|title }}:</strong>
+                        {{ value }}
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="info-item">
+                    {{ result }}
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    {% elif searched %}
+
+        <div class="not-found">
+            ⚠️ No information was found for
+            <strong>{{ medicine }}</strong>
+            in the demo database.
+        </div>
+
+    {% endif %}
+
+
+    <p class="note">
+        This information is provided for educational/demo purposes only.
+        Always ask a doctor or pharmacist for medical advice.
+    </p>
+
+    <a href="/dashboard" class="back">
+        ← Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>

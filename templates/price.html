@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedMatch AI - Price Comparison</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #eef2ff, #f8f9ff);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 85%;
+            max-width: 900px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #4b3f72;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        input {
+            flex: 1;
+            padding: 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 14px 22px;
+            background: #5b4b8a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #46386f;
+        }
+
+        .result {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 15px;
+            background: #fafafa;
+        }
+
+        .result h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .lowest {
+            border: 2px solid #2e7d32;
+            background: #f1fff2;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #2e7d32;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .no-result {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+        }
+
+        .note {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 13px;
+            color: #777;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #5b4b8a;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>💰 Medicine Price Comparison</h1>
+
+    <p class="subtitle">
+        Compare demo medicine prices from different pharmacies
+    </p>
+
+    <form action="/price" method="POST">
+
+        <input
+            type="text"
+            name="medicine"
+            placeholder="Enter medicine name"
+            value="{{ medicine if medicine else '' }}"
+            required
+        >
+
+        <button type="submit">
+            Compare Prices
+        </button>
+
+    </form>
+
+    {% if results %}
+
+        <h2>Results for "{{ medicine }}"</h2>
+
+        {% for pharmacy in results %}
+
+            <div class="result {% if loop.first %}lowest{% endif %}">
+
+                <h3>🏥 {{ pharmacy["name"] }}</h3>
+
+                <p>
+                    📍 Location:
+                    {{ pharmacy["location"] }}
+                </p>
+
+                <p class="price">
+                    💰 ₹{{ pharmacy["price"] }}
+                </p>
+
+                {% if loop.first %}
+                    <span class="badge">
+                        ⭐ Lowest Demo Price
+                    </span>
+                {% endif %}
+
+            </div>
+
+        {% endfor %}
+
+    {% elif searched %}
+
+        <div class="no-result">
+            ⚠️ No matching pharmacy was found
+            in the demo database.
+        </div>
+
+    {% endif %}
+
+    <p class="note">
+        Pharmacy names, locations and prices shown here are
+        fictional demo data for this project.
+    </p>
+
+    <a href="/dashboard" class="back">
+        ← Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>

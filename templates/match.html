@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Medicine Match - MedMatch AI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f4f7ff;
+            color: #243b64;
+        }
+
+        nav {
+            background: white;
+            padding: 18px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .back {
+            text-decoration: none;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .match-box {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .description {
+            color: #667085;
+            margin-bottom: 30px;
+        }
+
+        form {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        input {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #d5dbe5;
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        button {
+            padding: 15px 22px;
+            border: none;
+            border-radius: 10px;
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f8f9ff;
+            border-radius: 15px;
+            text-align: left;
+        }
+
+        .result h2 {
+            margin-bottom: 15px;
+        }
+
+        .warning {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff8e8;
+            border-radius: 10px;
+            color: #765b20;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .note {
+            margin-top: 25px;
+            color: #888;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">
+            💊 MedMatch AI
+        </div>
+
+        <a href="/dashboard" class="back">
+            ← Dashboard
+        </a>
+    </nav>
+
+    <div class="container">
+
+        <div class="match-box">
+
+            <div class="icon">🤖</div>
+
+            <h1>AI Medicine Match</h1>
+
+            <p class="description">
+                Find potentially similar medicines in the demo database.
+            </p>
+
+            <form method="POST" action="/match">
+
+                <input
+                    type="text"
+                    name="medicine"
+                    placeholder="Enter medicine name"
+                    required
+                >
+
+                <button type="submit">
+                    Find Match
+                </button>
+
+            </form>
+
+            {% if result %}
+
+            <div class="result">
+
+                <h2>🤖 Matching Result</h2>
+
+                <p>
+                    <strong>Medicine:</strong>
+                    {{ result["name"] }}
+                </p>
+
+                <p>
+                    <strong>Category:</strong>
+                    {{ result["category"] }}
+                </p>
+
+                {% if result["alternatives"] %}
+
+                <h3 style="margin-top: 20px;">
+                    Potentially Similar Entries
+                </h3>
+
+                <ul style="margin-top: 10px; padding-left: 20px;">
+
+                    {% for alternative in result["alternatives"] %}
+
+                    <li>{{ alternative }}</li>
+
+                    {% endfor %}
+
+                </ul>
+
+                {% else %}
+
+                <p style="margin-top: 15px;">
+                    No similar entries are currently available
+                    in the demo database.
+                </p>
+
+                {% endif %}
+
+                <div class="warning">
+                    ⚠️ A similar database entry does not automatically mean
+                    the medicines are interchangeable. Consult a qualified
+                    healthcare professional before changing medicines.
+                </div>
+
+            </div>
+
+            {% endif %}
+
+            <p class="note">
+                This feature is a project demonstration using a small
+                local medicine database.
+            </p>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

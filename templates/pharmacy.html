@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pharmacy Finder - MedMatch AI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f4f7ff;
+            color: #243b64;
+        }
+
+        nav {
+            background: white;
+            padding: 18px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .back {
+            text-decoration: none;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .search-box {
+            background: white;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .description {
+            color: #667085;
+            margin-bottom: 30px;
+        }
+
+        form {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        input {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #d5dbe5;
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        button {
+            padding: 15px 22px;
+            border: none;
+            border-radius: 10px;
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #5568d8;
+        }
+
+        .results {
+            margin-top: 30px;
+        }
+
+        .pharmacy-card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 18px;
+            border-radius: 15px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.07);
+            text-align: left;
+        }
+
+        .pharmacy-card h2 {
+            margin-bottom: 10px;
+        }
+
+        .pharmacy-card p {
+            color: #667085;
+            margin-bottom: 8px;
+        }
+
+        .available {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 7px 12px;
+            border-radius: 20px;
+            background: #e8f7ee;
+            color: #26734d;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .no-result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #fff8e8;
+            border-radius: 12px;
+            color: #765b20;
+        }
+
+        .note {
+            margin-top: 25px;
+            color: #888;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            form {
+                flex-direction: column;
+            }
+
+            nav {
+                padding: 18px 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+
+        <div class="logo">
+            💊 MedMatch AI
+        </div>
+
+        <a href="/dashboard" class="back">
+            ← Dashboard
+        </a>
+
+    </nav>
+
+
+    <div class="container">
+
+        <div class="search-box">
+
+            <div class="icon">🏥</div>
+
+            <h1>Pharmacy Finder</h1>
+
+            <p class="description">
+                Search the demo pharmacy database for medicine availability.
+            </p>
+
+
+            <form method="POST" action="/pharmacy">
+
+                <input
+                    type="text"
+                    name="medicine"
+                    placeholder="Example: Paracetamol"
+                    required
+                >
+
+                <button type="submit">
+                    Find Pharmacy
+                </button>
+
+            </form>
+
+        </div>
+
+
+        {% if medicine %}
+
+        <div class="results">
+
+            <h2>
+                🏥 Pharmacies for "{{ medicine.title() }}"
+            </h2>
+
+            {% if results %}
+
+                {% for pharmacy in results %}
+
+                <div class="pharmacy-card">
+
+                    <h2>
+                        🏥 {{ pharmacy["name"] }}
+                    </h2>
+
+                    <p>
+                        📍 Location: {{ pharmacy["location"] }}
+                    </p>
+
+                    <p>
+                        💰 Demo Price: {{ pharmacy["price"] }}
+                    </p>
+
+                    <span class="available">
+                        ✓ Available
+                    </span>
+
+                </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="no-result">
+
+                    ⚠️ No matching pharmacy was found
+                    in the demo database.
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+        {% endif %}
+
+
+        <p class="note">
+            Pharmacy names, locations, prices and availability shown here
+            are fictional demo data for this project.
+        </p>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - MedMatch AI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7ff;
+            color: #243b64;
+        }
+
+        /* Navigation */
+        nav {
+            background: white;
+            padding: 18px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .profile {
+            color: #667085;
+        }
+
+        .logout {
+            text-decoration: none;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        /* Main */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 25px;
+        }
+
+        .welcome {
+            margin-bottom: 35px;
+        }
+
+        .welcome h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+            color: #667085;
+            font-size: 16px;
+        }
+
+        /* Cards */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .card {
+            background: white;
+            padding: 28px;
+            border-radius: 16px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.07);
+            transition: 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+        }
+
+        .icon {
+            font-size: 38px;
+            margin-bottom: 15px;
+        }
+
+        .card h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: #667085;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 18px;
+        }
+
+        .card a {
+            text-decoration: none;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .card a:hover {
+            text-decoration: underline;
+        }
+
+        /* Reminder section */
+        .reminder {
+            margin-top: 35px;
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.07);
+        }
+
+        .reminder h2 {
+            margin-bottom: 10px;
+        }
+
+        .reminder p {
+            color: #667085;
+        }
+
+        /* Mobile */
+        @media (max-width: 800px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                padding: 18px 25px;
+            }
+
+            .nav-right {
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav>
+
+        <div class="logo">
+            💊 MedMatch AI
+        </div>
+
+        <div class="nav-right">
+
+            <span class="profile">
+                👤 Welcome, User
+            </span>
+
+            <a href="/" class="logout">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- Dashboard -->
+    <div class="container">
+
+        <!-- Welcome -->
+        <div class="welcome">
+
+            <h1>
+                Welcome to your Dashboard 👋
+            </h1>
+
+            <p>
+                Manage medicines, pharmacies, AI matching and refill reminders
+                from one place.
+            </p>
+
+        </div>
+
+
+        <!-- Feature Cards -->
+        <div class="cards">
+
+
+            <!-- 1. Medicine Search -->
+            <div class="card">
+
+                <div class="icon">
+                    🔎
+                </div>
+
+                <h2>
+                    Medicine Search
+                </h2>
+
+                <p>
+                    Search for medicines and check their availability.
+                </p>
+
+                <a href="/search">
+                    Search Medicine →
+                </a>
+
+            </div>
+
+
+            <!-- 2. AI Medicine Match -->
+            <div class="card">
+
+                <div class="icon">
+                    🤖
+                </div>
+
+                <h2>
+                    AI Medicine Match
+                </h2>
+
+                <p>
+                    Find potentially similar medicines from our verified
+                    medicine database.
+                </p>
+
+                <a href="/match">
+                    Find Alternatives →
+                </a>
+
+            </div>
+
+
+            <!-- 3. Pharmacy Finder -->
+            <div class="card">
+
+                <div class="icon">
+                    🏥
+                </div>
+
+                <h2>
+                    Pharmacy Finder
+                </h2>
+
+                <p>
+                    View pharmacies and check medicine stock availability.
+                </p>
+
+                <a href="/pharmacy">
+                    Find Pharmacy →
+                </a>
+
+            </div>
+
+
+            <!-- 4. Price Comparison -->
+            <div class="card">
+
+                <div class="icon">
+                    💰
+                </div>
+
+                <h2>
+                    Price Comparison
+                </h2>
+
+                <p>
+                    Compare medicine prices across available pharmacies.
+                </p>
+
+                <a href="/price">
+                    Compare Prices →
+                </a>
+
+            </div>
+
+
+            <!-- 5. Refill Reminder -->
+            <div class="card">
+
+                <div class="icon">
+                    🔔
+                </div>
+
+                <h2>
+                    Refill Reminder
+                </h2>
+
+                <p>
+                    Manage reminders for your upcoming medicine refills.
+                </p>
+
+                <a href="/reminder">
+                    Set Reminder →
+                </a>
+
+            </div>
+
+
+            <!-- 6. Medicine Information -->
+            <div class="card">
+
+                <div class="icon">
+                    💊
+                </div>
+
+                <h2>
+                    Medicine Information
+                </h2>
+
+                <p>
+                    Get simple information about medicines from our
+                    demo medicine database.
+                </p>
+
+                <a href="/medicine-info">
+                    View Information →
+                </a>
+
+            </div>
+
+
+            <!-- 7. My Profile -->
+            <div class="card">
+
+                <div class="icon">
+                    👤
+                </div>
+
+                <h2>
+                    My Profile
+                </h2>
+
+                <p>
+                    View and manage your MedMatch AI account information.
+                </p>
+
+                <a href="/profile">
+                    View Profile →
+                </a>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- Reminder Section -->
+        <div class="reminder">
+
+    <h2>
+        🔔 Upcoming Reminder
+    </h2>
+
+    {% if reminder %}
+
+        <p>
+            💊 Medicine:
+            <strong>{{ reminder["medicine"] }}</strong>
+        </p>
+
+        <p>
+            📅 Refill Date:
+            <strong>{{ reminder["date"] }}</strong>
+        </p>
+
+        <p style="margin-top: 10px; color: #2e7d32;">
+            ✅ Reminder is saved successfully.
+        </p>
+
+    {% else %}
+
+        <p>
+            No medicine refill reminders yet.
+            Add a reminder when you need one.
+        </p>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>

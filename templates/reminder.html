@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedMatch AI - Refill Reminder</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #eef2ff, #f8f9ff);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 85%;
+            max-width: 700px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #4b3f72;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #444;
+        }
+
+        input {
+            padding: 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 14px;
+            background: #5b4b8a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #46386f;
+        }
+
+        .success {
+            margin-top: 25px;
+            padding: 18px;
+            border-radius: 10px;
+            background: #f1fff2;
+            border: 2px solid #2e7d32;
+            color: #2e7d32;
+        }
+
+        .note {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 13px;
+            color: #777;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #5b4b8a;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>⏰ Refill Reminder</h1>
+
+    <p class="subtitle">
+        Set a demo reminder for your medicine refill
+    </p>
+
+    <form action="/reminder" method="POST">
+
+        <label for="medicine">
+            💊 Medicine Name
+        </label>
+
+        <input
+            type="text"
+            id="medicine"
+            name="medicine"
+            placeholder="Enter medicine name"
+            value="{{ medicine if medicine else '' }}"
+            required
+        >
+
+        <label for="date">
+            📅 Refill Date
+        </label>
+
+        <input
+            type="date"
+            id="date"
+            name="date"
+            value="{{ date if date else '' }}"
+            required
+        >
+
+        <button type="submit">
+            🔔 Set Reminder
+        </button>
+
+    </form>
+
+    {% if reminder_set %}
+
+        <div class="success">
+
+            ✅ Reminder Set Successfully!
+
+            <p>
+                💊 Medicine:
+                <strong>{{ medicine }}</strong>
+            </p>
+
+            <p>
+                📅 Refill Date:
+                <strong>{{ date }}</strong>
+            </p>
+
+            <p>
+                🔔 You can use this information as a
+                demo refill reminder.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+    <p class="note">
+        This is a fictional demo reminder feature for the
+        MedMatch AI project.
+    </p>
+
+    <a href="/dashboard" class="back">
+        ← Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>
