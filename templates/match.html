@@ -167,6 +167,12 @@
             <div class="result">
 
                 <h2>🤖 Matching Result</h2>
+                {% if similarity_score %}
+                <p style="margin-bottom: 15px;">
+                  <strong>AI Similarity:</strong>
+                  {{ similarity_score }}%
+                </p>
+                {% endif %}
 
                 <p>
                     <strong>Medicine:</strong>

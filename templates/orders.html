@@ -1,0 +1,440 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Orders - MedMatch AI</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f4f7ff;
+            color: #243b64;
+        }
+
+        nav {
+            background: white;
+            padding: 18px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .back {
+            text-decoration: none;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 45px auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #667085;
+        }
+
+        .order-card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 16px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.07);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .order-id {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Status */
+
+        .status {
+            display: inline-block;
+            padding: 7px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .confirmed {
+            background: #e8f7ee;
+            color: #26734d;
+        }
+
+        .ready {
+            background: #e8f0ff;
+            color: #3155a6;
+        }
+
+        .completed {
+            background: #e6f7f1;
+            color: #176b52;
+        }
+
+        .details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .detail {
+            background: #f8f9ff;
+            padding: 13px;
+            border-radius: 10px;
+        }
+
+        .detail strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #243b64;
+        }
+
+        .detail span {
+            color: #667085;
+        }
+
+        .total {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #e5e7eb;
+            text-align: right;
+            font-size: 18px;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .no-orders {
+            background: white;
+            padding: 50px 25px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.07);
+        }
+
+        .no-orders .icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        .no-orders h2 {
+            margin-bottom: 10px;
+        }
+
+        .no-orders p {
+            color: #667085;
+            margin-bottom: 20px;
+        }
+
+        .order-button {
+            display: inline-block;
+            padding: 12px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .note {
+            margin-top: 25px;
+            text-align: center;
+            color: #888;
+            font-size: 12px;
+        }
+
+        @media (max-width: 650px) {
+
+            nav {
+                padding: 18px 25px;
+            }
+
+            .details {
+                grid-template-columns: 1fr;
+            }
+
+            .order-header {
+                align-items: flex-start;
+                gap: 10px;
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+
+    <nav>
+
+        <div class="logo">
+            💊 MedMatch AI
+        </div>
+
+        <a href="/dashboard" class="back">
+            ← Dashboard
+        </a>
+
+    </nav>
+
+
+    <!-- Main -->
+
+    <div class="container">
+
+        <div class="header">
+
+            <h1>
+                📋 My Orders
+            </h1>
+
+            <p>
+                View your medicine orders and their current status.
+            </p>
+
+        </div>
+
+
+        {% if orders %}
+
+            {% for order in orders %}
+
+            <div class="order-card">
+
+                <div class="order-header">
+
+                    <div class="order-id">
+                        📦 Order #{{ order["id"] }}
+                    </div>
+
+
+                    <!-- ORDER STATUS -->
+
+                    {% if order["status"] == "Pending" %}
+
+                        <div class="status pending">
+                            🟠 Pending
+                        </div>
+
+                    {% elif order["status"] == "Confirmed" %}
+
+                        <div class="status confirmed">
+                            🟢 Confirmed
+                        </div>
+
+                    {% elif order["status"] == "Ready for Pickup" %}
+
+                        <div class="status ready">
+                            🔵 Ready for Pickup
+                        </div>
+
+                    {% elif order["status"] == "Completed" %}
+
+                        <div class="status completed">
+                            ✅ Completed
+                        </div>
+
+                    {% else %}
+
+                        <div class="status">
+                            {{ order["status"] }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- ORDER DETAILS -->
+
+                <div class="details">
+
+
+                    <div class="detail">
+
+                        <strong>
+                            💊 Medicine
+                        </strong>
+
+                        <span>
+                            {{ order["medicine"] }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail">
+
+                        <strong>
+                            🔢 Quantity
+                        </strong>
+
+                        <span>
+                            {{ order["quantity"] }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail">
+
+                        <strong>
+                            🏥 Pharmacy
+                        </strong>
+
+                        <span>
+                            {{ order["pharmacy"] }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail">
+
+                        <strong>
+                            📍 Location
+                        </strong>
+
+                        <span>
+                            {{ order["location"] }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail">
+
+                        <strong>
+                            💰 Price per Medicine
+                        </strong>
+
+                        <span>
+                            ₹{{ "%.2f"|format(order["price"] or 0) }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail">
+
+                        <strong>
+                            📅 Order Date
+                        </strong>
+
+                        <span>
+                            {{ order["order_date"] }}
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- TOTAL -->
+
+                <div class="total">
+
+                    Total:
+
+                    ₹{{ "%.2f"|format(
+                        (order["price"] or 0) * order["quantity"]
+                    ) }}
+
+                </div>
+
+
+            </div>
+
+            {% endfor %}
+
+
+        {% else %}
+
+
+            <!-- NO ORDERS -->
+
+            <div class="no-orders">
+
+                <div class="icon">
+                    📦
+                </div>
+
+                <h2>
+                    No Orders Yet
+                </h2>
+
+                <p>
+                    You haven't placed any medicine orders yet.
+                </p>
+
+                <a href="/order" class="order-button">
+                    🛒 Order Medicine
+                </a>
+
+            </div>
+
+
+        {% endif %}
+
+
+        <p class="note">
+
+            Orders shown here are from the MedMatch AI
+            project demonstration database.
+
+        </p>
+
+    </div>
+
+</body>
+
+</html>
+```

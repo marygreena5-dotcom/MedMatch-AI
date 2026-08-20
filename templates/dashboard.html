@@ -178,6 +178,28 @@
 
     <!-- Dashboard -->
     <div class="container">
+        {% if notification %}
+
+<div style="
+    background: #e8f7ee;
+    color: #26734d;
+    padding: 18px 22px;
+    border-radius: 14px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+">
+
+    <strong>
+        🔔 Order Notification
+    </strong>
+
+    <p style="margin-top: 8px;">
+        {{ notification }}
+    </p>
+
+</div>
+
+{% endif %}
 
         <!-- Welcome -->
         <div class="welcome">
@@ -351,9 +373,50 @@
                     View Profile →
                 </a>
 
+            </div>           
+            <!-- 8. Order Medicine -->
+            <div class="card">
+
+                <div class="icon">
+                    🛒
+                </div>
+
+                <h2>
+                    Order Medicine
+                </h2>
+
+                <p>
+                    Select a pharmacy, choose your medicine quantity
+                    and place an order.
+                </p>
+
+                <a href="/order">
+                    Order Medicine →
+                </a>
+
             </div>
 
+            <!-- 9. My Orders -->
+            <div class="card">
 
+                <div class="icon">
+                📋
+                </div>
+
+                <h2>
+                My Orders
+                </h2>
+
+    <p>
+        View your previous medicine orders and
+        check their current status.
+    </p>
+
+    <a href="/orders">
+        View My Orders →
+    </a>
+
+</div>
         </div>
 
 
