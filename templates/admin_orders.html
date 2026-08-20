@@ -1,0 +1,387 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Pharmacy Orders - MedMatch AI</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7ff;
+            color: #243b64;
+        }
+
+        nav {
+            background: white;
+            padding: 18px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .back {
+            text-decoration: none;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #667085;
+        }
+
+        .order-card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 16px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.07);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .order-id {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .status {
+            padding: 7px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .detail {
+            background: #f8f9ff;
+            padding: 13px;
+            border-radius: 10px;
+        }
+
+        .detail strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .detail span {
+            color: #667085;
+        }
+
+        .update-form {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        select {
+            padding: 10px;
+            border: 1px solid #d5dbe5;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #5568d8;
+        }
+
+        .no-orders {
+            background: white;
+            padding: 50px;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        @media (max-width: 700px) {
+
+            nav {
+                padding: 18px 25px;
+            }
+
+            .details {
+                grid-template-columns: 1fr;
+            }
+
+            .order-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .update-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <nav>
+
+        <div class="logo">
+            💊 MedMatch AI
+        </div>
+
+        <a href="/dashboard" class="back">
+            ← Dashboard
+        </a>
+
+    </nav>
+
+
+    <div class="container">
+
+        <div class="header">
+
+            <h1>
+                🏥 Pharmacy Order Management
+            </h1>
+
+            <p>
+                View customer medicine orders and update their status.
+            </p>
+
+        </div>
+
+
+        {% if orders %}
+
+            {% for order in orders %}
+
+            <div class="order-card">
+
+                <div class="order-header">
+
+                    <div class="order-id">
+                        📦 Order #{{ order["id"] }}
+                    </div>
+
+                    <div class="status">
+                        {{ order["status"] }}
+                    </div>
+
+                </div>
+
+
+                <div class="details">
+
+                    <div class="detail">
+
+                        <strong>
+                            👤 Customer
+                        </strong>
+
+                        <span>
+                            {{ order["customer"] }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail">
+
+                        <strong>
+                            💊 Medicine
+                        </strong>
+
+                        <span>
+                            {{ order["medicine"] }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail">
+
+                        <strong>
+                            🔢 Quantity
+                        </strong>
+
+                        <span>
+                            {{ order["quantity"] }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail">
+
+                        <strong>
+                            🏥 Pharmacy
+                        </strong>
+
+                        <span>
+                            {{ order["pharmacy"] }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail">
+
+                        <strong>
+                            📍 Location
+                        </strong>
+
+                        <span>
+                            {{ order["location"] }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail">
+
+                        <strong>
+                            📅 Order Date
+                        </strong>
+
+                        <span>
+                            {{ order["order_date"] }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <form
+                    method="POST"
+                    action="/admin/update-order"
+                    class="update-form"
+                >
+
+                    <input
+                        type="hidden"
+                        name="order_id"
+                        value="{{ order['id'] }}"
+                    >
+
+                    <select name="status">
+
+                        <option
+                            value="Pending"
+                            {% if order["status"] == "Pending" %}selected{% endif %}
+                        >
+                            🟠 Pending
+                        </option>
+
+                        <option
+                            value="Confirmed"
+                            {% if order["status"] == "Confirmed" %}selected{% endif %}
+                        >
+                            🟢 Confirmed
+                        </option>
+
+                        <option
+                            value="Ready for Pickup"
+                            {% if order["status"] == "Ready for Pickup" %}selected{% endif %}
+                        >
+                            🔵 Ready for Pickup
+                        </option>
+
+                        <option
+                            value="Completed"
+                            {% if order["status"] == "Completed" %}selected{% endif %}
+                        >
+                            ✅ Completed
+                        </option>
+
+                    </select>
+
+                    <button type="submit">
+                        Update Status
+                    </button>
+
+                </form>
+
+            </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="no-orders">
+
+                <h2>
+                    📦 No Orders
+                </h2>
+
+                <p>
+                    There are currently no customer orders.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</body>
+
+</html>
+```

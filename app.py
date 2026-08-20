@@ -121,17 +121,34 @@ def register():
 @app.route("/dashboard")
 def dashboard():
 
+    user_id = session.get("user_id")
+
+    if not user_id:
+        return redirect(url_for("login"))
+
     reminder = session.get("reminder")
 
-    # Get order notification
-    notification = session.get("notification")
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    # Get latest notification for this user
+    cursor.execute("""
+        SELECT id, message, created_at
+        FROM notifications
+        WHERE user_id = ?
+        ORDER BY id DESC
+        LIMIT 1
+    """, (user_id,))
+
+    notification = cursor.fetchone()
+
+    connection.close()
 
     return render_template(
         "dashboard.html",
         reminder=reminder,
         notification=notification
     )
-
 
 # ---------------- MEDICINE SEARCH ----------------
 @app.route("/search", methods=["GET", "POST"])
@@ -627,6 +644,110 @@ def orders():
         "orders.html",
         orders=orders_data
     )
+# ---------------- PHARMACY ORDER MANAGEMENT ----------------
+@app.route("/admin/orders")
+def admin_orders():
+
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT
+            orders.id,
+            users.name AS customer,
+            medicines.name AS medicine,
+            pharmacies.name AS pharmacy,
+            pharmacies.location,
+            orders.quantity,
+            stock.price,
+            orders.order_date,
+            orders.status
+        FROM orders
+
+        JOIN users
+            ON orders.user_id = users.id
+
+        JOIN medicines
+            ON orders.medicine_id = medicines.id
+
+        JOIN pharmacies
+            ON orders.pharmacy_id = pharmacies.id
+
+        LEFT JOIN stock
+            ON stock.medicine_id = orders.medicine_id
+            AND stock.pharmacy_id = orders.pharmacy_id
+
+        ORDER BY orders.id DESC
+    """)
+
+    orders_data = cursor.fetchall()
+
+    connection.close()
+
+    return render_template(
+        "admin_orders.html",
+        orders=orders_data
+    )
+# ---------------- UPDATE ORDER STATUS ----------------
+@app.route("/admin/update-order", methods=["POST"])
+def update_order_status():
+
+    order_id = request.form.get("order_id")
+    status = request.form.get("status")
+
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    # Get order information before updating
+    cursor.execute("""
+        SELECT
+            orders.user_id,
+            medicines.name AS medicine,
+            pharmacies.name AS pharmacy,
+            orders.quantity
+        FROM orders
+        JOIN medicines
+            ON orders.medicine_id = medicines.id
+        JOIN pharmacies
+            ON orders.pharmacy_id = pharmacies.id
+        WHERE orders.id = ?
+    """, (order_id,))
+
+    order = cursor.fetchone()
+
+    if order:
+
+        # Update order status
+        cursor.execute("""
+            UPDATE orders
+            SET status = ?
+            WHERE id = ?
+        """, (status, order_id))
+
+        connection.commit()
+
+        # Create notification for the customer
+        notification = (
+            f"Order #{order_id}: "
+            f"{order['medicine']} × {order['quantity']} "
+            f"from {order['pharmacy']} is now {status}."
+        )
+
+        # Store notification for that user
+        cursor.execute("""
+            INSERT INTO notifications
+            (user_id, message)
+            VALUES (?, ?)
+        """, (
+            order["user_id"],
+            notification
+        ))
+
+        connection.commit()
+
+    connection.close()
+
+    return redirect(url_for("admin_orders"))
 # ---------------- RUN APPLICATION ----------------
 if __name__ == "__main__":
     app.run(debug=True)
