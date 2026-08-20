@@ -115,6 +115,34 @@ def register():
         "register.html",
         message=message
     )
+# ---------------- ADMIN LOGIN ----------------
+@app.route("/admin-login", methods=["GET", "POST"])
+def admin_login():
+
+    message = None
+
+    # Demo admin credentials
+    ADMIN_EMAIL = "admin@medmatch.com"
+    ADMIN_PASSWORD = "admin123"
+
+    if request.method == "POST":
+
+        email = request.form.get("email", "").strip()
+        password = request.form.get("password", "")
+
+        if email == ADMIN_EMAIL and password == ADMIN_PASSWORD:
+
+            session["admin_logged_in"] = True
+            session["admin_email"] = email
+
+            return redirect(url_for("admin_orders"))
+
+        message = "Invalid admin email or password."
+
+    return render_template(
+        "admin_login.html",
+        message=message
+    )
 
 
 # ---------------- DASHBOARD ----------------
@@ -647,6 +675,9 @@ def orders():
 # ---------------- PHARMACY ORDER MANAGEMENT ----------------
 @app.route("/admin/orders")
 def admin_orders():
+        # Admin must be logged in
+    if not session.get("admin_logged_in"):
+        return redirect(url_for("admin_login"))
 
     connection = get_db_connection()
     cursor = connection.cursor()
@@ -691,6 +722,9 @@ def admin_orders():
 # ---------------- UPDATE ORDER STATUS ----------------
 @app.route("/admin/update-order", methods=["POST"])
 def update_order_status():
+        # Admin must be logged in
+    if not session.get("admin_logged_in"):
+        return redirect(url_for("admin_login"))
 
     order_id = request.form.get("order_id")
     status = request.form.get("status")
