@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-from database import create_tables, get_db_connection
+from database import create_tables, get_db_connection, add_sample_medicines
 from medicines import medicines
 from pharmacies import pharmacies
 from difflib import get_close_matches
 
 app = Flask(__name__)
 create_tables()
+add_sample_medicines()
 
 
 # Secret key required for Flask sessions
@@ -142,6 +143,40 @@ def admin_login():
     return render_template(
         "admin_login.html",
         message=message
+    )
+    # ---------------- REFILL REMINDER ----------------
+@app.route("/reminder", methods=["GET", "POST"])
+def reminder():
+
+    user_id = session.get("user_id")
+
+    # User must be logged in
+    if not user_id:
+        return redirect(url_for("login"))
+
+    message = None
+
+    if request.method == "POST":
+
+        medicine = request.form.get("medicine", "").strip()
+        reminder_date = request.form.get("reminder_date", "").strip()
+
+        if not medicine or not reminder_date:
+            message = "Please enter medicine name and reminder date."
+
+        else:
+            # Save reminder in session for now
+            session["reminder"] = {
+                "medicine": medicine,
+                "date": reminder_date
+            }
+
+            message = "Refill reminder saved successfully!"
+
+    return render_template(
+        "reminder.html",
+        message=message,
+        reminder=session.get("reminder")
     )
 
 

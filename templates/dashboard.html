@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -118,6 +119,25 @@
             text-decoration: underline;
         }
 
+        /* Notification */
+        .notification {
+            background: #e8f7ee;
+            color: #26734d;
+            padding: 18px 22px;
+            border-radius: 14px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+        }
+
+        .notification h2 {
+            margin-bottom: 8px;
+            color: #2e7d32;
+        }
+
+        .notification p {
+            color: #444;
+        }
+
         /* Reminder section */
         .reminder {
             margin-top: 35px;
@@ -128,11 +148,17 @@
         }
 
         .reminder h2 {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         .reminder p {
             color: #667085;
+            margin-bottom: 8px;
+        }
+
+        .success-text {
+            margin-top: 10px;
+            color: #2e7d32 !important;
         }
 
         /* Mobile */
@@ -178,28 +204,24 @@
 
     <!-- Dashboard -->
     <div class="container">
+
+        <!-- Order Notification - Displayed ONLY ONCE -->
         {% if notification %}
 
-<div style="
-    background: #e8f7ee;
-    color: #26734d;
-    padding: 18px 22px;
-    border-radius: 14px;
-    margin-bottom: 25px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.06);
-">
+        <div class="notification">
 
-    <strong>
-        🔔 Order Notification
-    </strong>
+            <h2>
+                🔔 Order Notification
+            </h2>
 
-    <p style="margin-top: 8px;">
-        {{ notification["message"] }}
-    </p>
+            <p>
+                {{ notification["message"] }}
+            </p>
 
-</div>
+        </div>
 
-{% endif %}
+        {% endif %}
+
 
         <!-- Welcome -->
         <div class="welcome">
@@ -373,7 +395,9 @@
                     View Profile →
                 </a>
 
-            </div>           
+            </div>
+
+
             <!-- 8. Order Medicine -->
             <div class="card">
 
@@ -396,120 +420,68 @@
 
             </div>
 
+
             <!-- 9. My Orders -->
             <div class="card">
 
                 <div class="icon">
-                📋
+                    📋
                 </div>
 
                 <h2>
-                My Orders
+                    My Orders
                 </h2>
 
-    <p>
-        View your previous medicine orders and
-        check their current status.
-    </p>
+                <p>
+                    View your previous medicine orders and
+                    check their current status.
+                </p>
 
-    <a href="/orders">
-        View My Orders →
-    </a>
+                <a href="/orders">
+                    View My Orders →
+                </a>
 
-</div>
+            </div>
+
         </div>
 
 
-        <!-- Reminder Section -->
+        <!-- Upcoming Reminder - Displayed ONLY ONCE -->
         <div class="reminder">
-            <!-- Order Notification -->
-{% if notification %}
 
-<div style="
-    margin-bottom: 25px;
-    background: #e8f7ee;
-    border-left: 5px solid #2e7d32;
-    padding: 18px 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-">
+            <h2>
+                🔔 Upcoming Reminder
+            </h2>
 
-    <h2 style="margin-bottom: 8px; color: #2e7d32;">
-        🔔 Order Notification
-    </h2>
+            {% if reminder %}
 
-    <p style="color: #444;">
-        {{ notification["message"] }}
-    </p>
+                <p>
+                    💊 Medicine:
+                    <strong>{{ reminder["medicine"] }}</strong>
+                </p>
 
-</div>
+                <p>
+                    📅 Refill Date:
+                    <strong>{{ reminder["date"] }}</strong>
+                </p>
 
-{% endif %}
+                <p class="success-text">
+                    ✅ Reminder is saved successfully.
+                </p>
 
+            {% else %}
 
-<div class="reminder">
+                <p>
+                    No medicine refill reminders yet.
+                    Add a reminder when you need one.
+                </p>
 
-    <h2>
-        🔔 Upcoming Reminder
-    </h2>
+            {% endif %}
 
-    {% if reminder %}
+        </div>
 
-        <p>
-            💊 Medicine:
-            <strong>{{ reminder["medicine"] }}</strong>
-        </p>
-
-        <p>
-            📅 Refill Date:
-            <strong>{{ reminder["date"] }}</strong>
-        </p>
-
-        <p style="margin-top: 10px; color: #2e7d32;">
-            ✅ Reminder is saved successfully.
-        </p>
-
-    {% else %}
-
-        <p>
-            No medicine refill reminders yet.
-            Add a reminder when you need one.
-        </p>
-
-    {% endif %}
-
-</div>
-
-    <h2>
-        🔔 Upcoming Reminder
-    </h2>
-
-    {% if reminder %}
-
-        <p>
-            💊 Medicine:
-            <strong>{{ reminder["medicine"] }}</strong>
-        </p>
-
-        <p>
-            📅 Refill Date:
-            <strong>{{ reminder["date"] }}</strong>
-        </p>
-
-        <p style="margin-top: 10px; color: #2e7d32;">
-            ✅ Reminder is saved successfully.
-        </p>
-
-    {% else %}
-
-        <p>
-            No medicine refill reminders yet.
-            Add a reminder when you need one.
-        </p>
-
-    {% endif %}
-
-</div>
+    </div>
 
 </body>
 </html>
+```

@@ -1,8 +1,10 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>MedMatch AI - Refill Reminder</title>
 
     <style>
@@ -75,6 +77,15 @@
             color: #2e7d32;
         }
 
+        .error {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #fff3f3;
+            border: 2px solid #c62828;
+            color: #c62828;
+        }
+
         .note {
             margin-top: 25px;
             text-align: center;
@@ -102,7 +113,8 @@
         Set a demo reminder for your medicine refill
     </p>
 
-    <form action="/reminder" method="POST">
+    <!-- Reminder Form -->
+    <form action="{{ url_for('reminder') }}" method="POST">
 
         <label for="medicine">
             💊 Medicine Name
@@ -113,19 +125,19 @@
             id="medicine"
             name="medicine"
             placeholder="Enter medicine name"
-            value="{{ medicine if medicine else '' }}"
+            value="{{ reminder.medicine if reminder else '' }}"
             required
         >
 
-        <label for="date">
+        <label for="reminder_date">
             📅 Refill Date
         </label>
 
         <input
             type="date"
-            id="date"
-            name="date"
-            value="{{ date if date else '' }}"
+            id="reminder_date"
+            name="reminder_date"
+            value="{{ reminder.date if reminder else '' }}"
             required
         >
 
@@ -135,37 +147,41 @@
 
     </form>
 
-    {% if reminder_set %}
+
+    <!-- Success Message -->
+    {% if message %}
 
         <div class="success">
+            ✅ {{ message }}
 
-            ✅ Reminder Set Successfully!
+            {% if reminder %}
 
-            <p>
-                💊 Medicine:
-                <strong>{{ medicine }}</strong>
-            </p>
+                <p>
+                    💊 Medicine:
+                    <strong>{{ reminder.medicine }}</strong>
+                </p>
 
-            <p>
-                📅 Refill Date:
-                <strong>{{ date }}</strong>
-            </p>
+                <p>
+                    📅 Refill Date:
+                    <strong>{{ reminder.date }}</strong>
+                </p>
 
-            <p>
-                🔔 You can use this information as a
-                demo refill reminder.
-            </p>
+                <p>
+                    🔔 Your demo refill reminder has been saved.
+                </p>
 
+            {% endif %}
         </div>
 
     {% endif %}
+
 
     <p class="note">
         This is a fictional demo reminder feature for the
         MedMatch AI project.
     </p>
 
-    <a href="/dashboard" class="back">
+    <a href="{{ url_for('dashboard') }}" class="back">
         ← Back to Dashboard
     </a>
 
@@ -173,3 +189,4 @@
 
 </body>
 </html>
+```
