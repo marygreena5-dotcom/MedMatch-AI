@@ -516,7 +516,19 @@ def medicine_info():
 # ---------------- MY PROFILE ----------------
 @app.route("/profile")
 def profile():
-    return render_template("profile.html")
+    if "user_id" not in session:
+        return redirect("/login")
+
+    connection = get_db_connection()
+
+    user = connection.execute(
+        "SELECT id, name, email, mobile FROM users WHERE id = ?",
+        (session["user_id"],)
+    ).fetchone()
+
+    connection.close()
+
+    return render_template("profile.html", user=user)
 # ---------------- ORDER MEDICINE ----------------
 @app.route("/order", methods=["GET", "POST"])
 def order():
