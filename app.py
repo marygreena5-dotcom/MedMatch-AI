@@ -369,14 +369,60 @@ def pharmacy():
 
         rows = cursor.fetchall()
 
-        for row in rows:
-            results.append({
-                "name": row["name"],
-                "location": row["location"],
-                "price": f"₹{row['price']:.2f}",
-                "available": row["available"]
-            })
+        # Pharmacy details for map and distance
+        pharmacy_locations = {
+            "City Care Pharmacy": {
+                "latitude": 8.1835,
+                "longitude": 77.4118
+            },
 
+            "Health Plus Pharmacy": {
+                "latitude": 8.1815,
+                "longitude": 77.4150
+            },
+
+            "MedLife Pharmacy": {
+                "latitude": 8.1870,
+                "longitude": 77.4085
+            }
+        }
+
+        for row in rows:
+
+            pharmacy_name = row["name"]
+
+            location_data = pharmacy_locations.get(
+                pharmacy_name
+            )
+
+            if location_data:
+
+                results.append({
+                  "name": pharmacy_name,
+                  "location": row["location"],
+                  "price": f"₹{row['price']:.2f}",
+                  "available": row["available"],
+                  "latitude": location_data["latitude"],
+                  "longitude": location_data["longitude"],
+
+                  "rating": {
+                  "City Care Pharmacy": 4.3,
+                  "Health Plus Pharmacy": 4.5,
+                  "MedLife Pharmacy": 4.2
+                  }.get(pharmacy_name, 4.0),
+
+                  "opening_time": {
+                  "City Care Pharmacy": "8:00 AM",
+                  "Health Plus Pharmacy": "9:00 AM",
+                  "MedLife Pharmacy": "8:30 AM"
+                  }.get(pharmacy_name, "9:00 AM"),
+
+                  "closing_time": {
+                  "City Care Pharmacy": "9:00 PM",
+                  "Health Plus Pharmacy": "10:00 PM",
+                  "MedLife Pharmacy": "8:30 PM"
+                  }.get(pharmacy_name, "9:00 PM")
+                })
         connection.close()
 
     return render_template(
@@ -384,7 +430,6 @@ def pharmacy():
         medicine=medicine,
         results=results
     )
-
 
 # ---------------- PRICE COMPARISON ----------------
 @app.route("/price", methods=["GET", "POST"])

@@ -1,12 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Pharmacy Finder - MedMatch AI</title>
 
+
+    <!-- Leaflet Map CSS -->
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+
     <style>
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -14,11 +27,15 @@
             font-family: Arial, sans-serif;
         }
 
+
         body {
             min-height: 100vh;
             background: #f4f7ff;
             color: #243b64;
         }
+
+
+        /* Navigation */
 
         nav {
             background: white;
@@ -29,10 +46,12 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.08);
         }
 
+
         .logo {
             font-size: 24px;
             font-weight: bold;
         }
+
 
         .back {
             text-decoration: none;
@@ -40,11 +59,17 @@
             font-weight: bold;
         }
 
+
+        /* Main container */
+
         .container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 50px auto;
             padding: 20px;
         }
+
+
+        /* Search box */
 
         .search-box {
             background: white;
@@ -54,25 +79,32 @@
             text-align: center;
         }
 
+
         .icon {
             font-size: 50px;
             margin-bottom: 15px;
         }
 
+
         h1 {
             margin-bottom: 10px;
         }
+
 
         .description {
             color: #667085;
             margin-bottom: 30px;
         }
 
+
+        /* Search form */
+
         form {
             display: flex;
             gap: 10px;
             justify-content: center;
         }
+
 
         input {
             flex: 1;
@@ -82,6 +114,7 @@
             font-size: 16px;
             outline: none;
         }
+
 
         button {
             padding: 15px 22px;
@@ -93,13 +126,35 @@
             cursor: pointer;
         }
 
+
         button:hover {
             background: #5568d8;
         }
 
+
+        /* Results */
+
         .results {
             margin-top: 30px;
         }
+
+
+        .results-title {
+            margin-bottom: 20px;
+        }
+
+
+        /* Two-column layout */
+
+        .pharmacy-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+
+        /* Pharmacy card */
 
         .pharmacy-card {
             background: white;
@@ -110,14 +165,19 @@
             text-align: left;
         }
 
+
         .pharmacy-card h2 {
             margin-bottom: 10px;
         }
+
 
         .pharmacy-card p {
             color: #667085;
             margin-bottom: 8px;
         }
+
+
+        /* Available badge */
 
         .available {
             display: inline-block;
@@ -130,6 +190,89 @@
             font-weight: bold;
         }
 
+
+        /* Distance badge */
+
+        .distance {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 7px 12px;
+            border-radius: 20px;
+            background: #eef2ff;
+            color: #4f46a5;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+
+        /* Rating */
+
+        .rating {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 7px 12px;
+            border-radius: 20px;
+            background: #fff7df;
+            color: #8a6410;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+
+        /* Open status */
+
+        .open-status {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 7px 12px;
+            border-radius: 20px;
+            background: #e8f7ee;
+            color: #26734d;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+
+        .closed-status {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 7px 12px;
+            border-radius: 20px;
+            background: #ffeaea;
+            color: #a33a3a;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+
+        /* Map */
+
+        .map-box {
+            background: white;
+            padding: 12px;
+            border-radius: 15px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.07);
+            position: sticky;
+            top: 20px;
+        }
+
+
+        .map-heading {
+            padding: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+
+        #map {
+            width: 100%;
+            height: 350px;
+            border-radius: 12px;
+        }
+
+
+        /* No result */
+
         .no-result {
             margin-top: 30px;
             padding: 20px;
@@ -138,6 +281,9 @@
             color: #765b20;
         }
 
+
+        /* Note */
+
         .note {
             margin-top: 25px;
             color: #888;
@@ -145,7 +291,28 @@
             text-align: center;
         }
 
+
+        /* Mobile */
+
+        @media (max-width: 800px) {
+
+            .pharmacy-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .map-box {
+                position: static;
+            }
+
+            #map {
+                height: 400px;
+            }
+
+        }
+
+
         @media (max-width: 600px) {
+
             form {
                 flex-direction: column;
             }
@@ -153,11 +320,18 @@
             nav {
                 padding: 18px 25px;
             }
+
         }
+
     </style>
+
 </head>
 
+
 <body>
+
+
+    <!-- Navigation -->
 
     <nav>
 
@@ -174,14 +348,21 @@
 
     <div class="container">
 
+
+        <!-- Search -->
+
         <div class="search-box">
 
-            <div class="icon">🏥</div>
+            <div class="icon">
+                🏥
+            </div>
 
-            <h1>Pharmacy Finder</h1>
+            <h1>
+                Pharmacy Finder
+            </h1>
 
             <p class="description">
-                Search the demo pharmacy database for medicine availability.
+                Search pharmacies where your medicine is available.
             </p>
 
 
@@ -205,60 +386,558 @@
 
         {% if medicine %}
 
+
         <div class="results">
 
-            <h2>
-                🏥 Pharmacies for "{{ medicine.title() }}"
+            <h2 class="results-title">
+
+                🏥 Pharmacies for
+                "{{ medicine.title() }}"
+
             </h2>
+
 
             {% if results %}
 
-                {% for pharmacy in results %}
 
-                <div class="pharmacy-card">
+            <div class="pharmacy-layout">
 
-                    <h2>
-                        🏥 {{ pharmacy["name"] }}
-                    </h2>
 
-                    <p>
-                        📍 Location: {{ pharmacy["location"] }}
-                    </p>
+                <!-- Pharmacy List -->
 
-                    <p>
-                        💰 Demo Price: {{ pharmacy["price"] }}
-                    </p>
+                <div>
 
-                    <span class="available">
-                        ✓ Available
-                    </span>
+                    {% for pharmacy in results %}
+
+                    <div
+                        class="pharmacy-card"
+                        data-lat="{{ pharmacy['latitude'] }}"
+                        data-lng="{{ pharmacy['longitude'] }}"
+                    >
+
+                        <h2>
+                            🏥 {{ pharmacy["name"] }}
+                        </h2>
+
+
+                        <p>
+                            📍 Location:
+                            {{ pharmacy["location"] }}
+                        </p>
+
+
+                        <p>
+                            💰 Demo Price:
+                            {{ pharmacy["price"] }}
+                        </p>
+
+
+                        <!-- Availability -->
+
+                        <span class="available">
+                            ✓ Available
+                        </span>
+
+
+                        <br>
+
+
+                        <!-- Distance -->
+
+                        <span
+                            class="distance"
+                            id="distance-{{ loop.index }}"
+                        >
+                            📏 Calculating distance...
+                        </span>
+
+
+                        <br>
+
+
+                        <!-- Rating -->
+
+                        <span class="rating">
+
+                            ⭐
+                            {{ pharmacy["rating"] }}/5
+
+                        </span>
+
+
+                        <br>
+
+
+                        <!-- Open / Closed -->
+
+                        <span
+                            class="open-status"
+                            id="status-{{ loop.index }}"
+                        >
+                            🕐 Checking...
+                        </span>
+
+                    </div>
+
+                    {% endfor %}
 
                 </div>
 
-                {% endfor %}
+
+                <!-- Map -->
+
+                <div class="map-box">
+
+                    <div class="map-heading">
+
+                        🗺️ Nearby Pharmacies
+
+                    </div>
+
+                    <div id="map"></div>
+
+                </div>
+
+
+            </div>
+
 
             {% else %}
 
-                <div class="no-result">
 
-                    ⚠️ No matching pharmacy was found
-                    in the demo database.
+            <div class="no-result">
 
-                </div>
+                ⚠️ No matching pharmacy was found
+                in the demo database.
+
+            </div>
+
 
             {% endif %}
 
+
         </div>
+
 
         {% endif %}
 
 
         <p class="note">
-            Pharmacy names, locations, prices and availability shown here
-            are fictional demo data for this project.
+
+            Pharmacy names, locations, prices, ratings and availability
+            shown here are fictional demo data for this project.
+
         </p>
+
 
     </div>
 
+
+    <!-- Leaflet JavaScript -->
+
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+    </script>
+
+
+    {% if results %}
+
+    <script>
+
+
+        /* --------------------------------
+           Pharmacy data from Flask
+        -------------------------------- */
+
+        const pharmacies = [
+
+            {% for pharmacy in results %}
+
+            {
+                name: "{{ pharmacy['name'] }}",
+
+                location: "{{ pharmacy['location'] }}",
+
+                latitude: {{ pharmacy['latitude'] }},
+
+                longitude: {{ pharmacy['longitude'] }},
+
+                price: "{{ pharmacy['price'] }}",
+
+                rating: {{ pharmacy['rating'] }},
+
+                openingTime: "{{ pharmacy['opening_time'] }}",
+
+                closingTime: "{{ pharmacy['closing_time'] }}"
+            }
+
+            {% if not loop.last %},{% endif %}
+
+            {% endfor %}
+
+        ];
+
+
+        /* --------------------------------
+           Convert time to minutes
+        -------------------------------- */
+
+        function convertTimeToMinutes(timeString) {
+
+            const parts = timeString
+                .replace(" AM", "")
+                .replace(" PM", "")
+                .split(":");
+
+            let hours = parseInt(parts[0]);
+
+            let minutes = parseInt(parts[1] || "0");
+
+            if (timeString.includes("PM") && hours !== 12) {
+                hours += 12;
+            }
+
+            if (timeString.includes("AM") && hours === 12) {
+                hours = 0;
+            }
+
+            return (hours * 60) + minutes;
+        }
+
+
+        /* --------------------------------
+           Check Open / Closed
+        -------------------------------- */
+
+        function updateOpeningStatus() {
+
+            const now = new Date();
+
+            const currentMinutes =
+                now.getHours() * 60 +
+                now.getMinutes();
+
+
+            pharmacies.forEach(function(pharmacy, index) {
+
+                const opening =
+                    convertTimeToMinutes(
+                        pharmacy.openingTime
+                    );
+
+                const closing =
+                    convertTimeToMinutes(
+                        pharmacy.closingTime
+                    );
+
+
+                const statusElement =
+                    document.getElementById(
+                        "status-" + (index + 1)
+                    );
+
+
+                if (
+                    currentMinutes >= opening &&
+                    currentMinutes <= closing
+                ) {
+
+                    statusElement.innerHTML =
+                        "🕐 Open Now";
+
+                    statusElement.className =
+                        "open-status";
+
+                } else {
+
+                    statusElement.innerHTML =
+                        "🕐 Closed Now";
+
+                    statusElement.className =
+                        "closed-status";
+
+                }
+
+            });
+
+        }
+
+
+        /* --------------------------------
+           Calculate distance
+        -------------------------------- */
+
+        function calculateDistance(
+            lat1,
+            lon1,
+            lat2,
+            lon2
+        ) {
+
+            const earthRadius = 6371;
+
+
+            const dLat =
+                (lat2 - lat1) *
+                Math.PI / 180;
+
+
+            const dLon =
+                (lon2 - lon1) *
+                Math.PI / 180;
+
+
+            const a =
+                Math.sin(dLat / 2) *
+                Math.sin(dLat / 2) +
+
+                Math.cos(
+                    lat1 * Math.PI / 180
+                ) *
+
+                Math.cos(
+                    lat2 * Math.PI / 180
+                ) *
+
+                Math.sin(dLon / 2) *
+                Math.sin(dLon / 2);
+
+
+            const c =
+                2 *
+                Math.atan2(
+                    Math.sqrt(a),
+                    Math.sqrt(1 - a)
+                );
+
+
+            return earthRadius * c;
+
+        }
+
+
+        /* --------------------------------
+           Create map
+        -------------------------------- */
+
+        function createMap(
+            userLatitude,
+            userLongitude
+        ) {
+
+
+            const map =
+                L.map("map");
+
+
+            /* OpenStreetMap */
+
+            L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+                    maxZoom: 19,
+                    attribution:
+                        "&copy; OpenStreetMap contributors"
+                }
+            ).addTo(map);
+
+
+            /* Current location */
+
+            const userMarker =
+                L.marker([
+                    userLatitude,
+                    userLongitude
+                ]).addTo(map);
+
+
+            userMarker.bindPopup(
+                "<b>📍 Your Current Location</b>"
+            );
+
+
+            /* Map bounds */
+
+            const bounds =
+                L.latLngBounds([
+                    [
+                        userLatitude,
+                        userLongitude
+                    ]
+                ]);
+
+
+            /* Add pharmacies */
+
+            pharmacies.forEach(
+                function(pharmacy, index) {
+
+
+                    /* Calculate distance */
+
+                    const distance =
+                        calculateDistance(
+                            userLatitude,
+                            userLongitude,
+                            pharmacy.latitude,
+                            pharmacy.longitude
+                        );
+
+
+                    /* Pharmacy marker */
+
+                    const marker =
+                        L.marker([
+                            pharmacy.latitude,
+                            pharmacy.longitude
+                        ]).addTo(map);
+
+
+                    marker.bindPopup(
+
+                        "<b>🏥 " +
+                        pharmacy.name +
+                        "</b><br>" +
+
+                        "📍 " +
+                        pharmacy.location +
+                        "<br>" +
+
+                        "💰 " +
+                        pharmacy.price +
+                        "<br>" +
+
+                        "⭐ " +
+                        pharmacy.rating +
+                        "/5<br>" +
+
+                        "📏 " +
+                        distance.toFixed(1) +
+                        " km away"
+
+                    );
+
+
+                    /* Add pharmacy to bounds */
+
+                    bounds.extend([
+                        pharmacy.latitude,
+                        pharmacy.longitude
+                    ]);
+
+
+                    /* Show distance in card */
+
+                    const distanceElement =
+                        document.getElementById(
+                            "distance-" +
+                            (index + 1)
+                        );
+
+
+                    if (distanceElement) {
+
+                        distanceElement.innerHTML =
+                            "📏 " +
+                            distance.toFixed(1) +
+                            " km away";
+
+                    }
+
+                }
+            );
+
+
+            /* Fit map */
+
+            map.fitBounds(
+                bounds,
+                {
+                    padding: [30, 30]
+                }
+            );
+
+        }
+
+
+        /* --------------------------------
+           Get current location
+        -------------------------------- */
+
+        if (
+            navigator.geolocation
+        ) {
+
+
+            navigator.geolocation.getCurrentPosition(
+
+                function(position) {
+
+
+                    const latitude =
+                        position.coords.latitude;
+
+
+                    const longitude =
+                        position.coords.longitude;
+
+
+                    /* Create map */
+
+                    createMap(
+                        latitude,
+                        longitude
+                    );
+
+                },
+
+
+                function(error) {
+
+
+                    alert(
+                        "Please allow location access to calculate pharmacy distance."
+                    );
+
+
+                    /*
+                    If location is denied,
+                    show map using first pharmacy.
+                    */
+
+                    if (pharmacies.length > 0) {
+
+                        createMap(
+                            pharmacies[0].latitude,
+                            pharmacies[0].longitude
+                        );
+
+                    }
+
+                }
+
+            );
+
+        }
+
+        else {
+
+            alert(
+                "Your browser does not support location services."
+            );
+
+        }
+
+
+        /* Check pharmacy opening status */
+
+        updateOpeningStatus();
+
+    </script>
+
+    {% endif %}
+
+
 </body>
+
 </html>
