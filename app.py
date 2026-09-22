@@ -3,15 +3,76 @@ from database import create_tables, get_db_connection, add_sample_medicines
 from medicines import medicines
 from pharmacies import pharmacies
 from difflib import get_close_matches
+from werkzeug.security import generate_password_hash, check_password_hash
+import time
+from datetime import timedelta
+import re
 
 app = Flask(__name__)
+app.secret_key = "medmatch-demo-secret-key"
+app.permanent_session_lifetime = timedelta(minutes=30)
+@app.before_request
+@app.before_request
+def check_session_timeout():
+
+    if "user_id" in session:
+
+        last_activity = session.get("last_activity")
+
+        if last_activity:
+            current_time = time.time()
+
+            if current_time - last_activity >= 120:
+
+                session.clear()
+
+                return redirect(
+                    url_for(
+                        "login",
+                        message="Your session has expired. Please login again."
+                    )
+                )
+
+        session["last_activity"] = time.time()
+
+
+@app.after_request
+def add_session_warning(response):
+
+    if "user_id" in session and response.mimetype == "text/html":
+
+        warning_script = """
+        <script>
+        setTimeout(function() {
+            alert("⚠️ Your session is about to expire. Please continue using the application.");
+        }, 105000);
+        </script>
+        """
+
+        response.set_data(
+            response.get_data(as_text=True).replace(
+                "</body>",
+                warning_script + "</body>"
+            )
+        )
+
+    return response
+
 create_tables()
 add_sample_medicines()
 
 
-# Secret key required for Flask sessions
-app.secret_key = "medmatch-demo-secret-key"
 
+# ---------------- PASSWORD VALIDATION ----------------
+def is_valid_password(password):
+
+    return (
+        8 <= len(password) <= 10
+        and re.search(r"[A-Z]", password)
+        and re.search(r"[a-z]", password)
+        and re.search(r"[0-9]", password)
+        and re.search(r"[^A-Za-z0-9]", password)
+    )
 
 # ---------------- HOME ----------------
 @app.route("/")
@@ -23,7 +84,7 @@ def home():
 @app.route("/login", methods=["GET", "POST"])
 def login():
 
-    message = None
+    message = request.args.get("message")
 
     if request.method == "POST":
 
@@ -34,26 +95,63 @@ def login():
         cursor = connection.cursor()
 
         cursor.execute("""
-            SELECT id, name, email, mobile
+            SELECT id, name, email, mobile, password
             FROM users
-            WHERE (email = ? OR mobile = ?)
-            AND password = ?
+            WHERE email = ? OR mobile = ?
         """, (
             email_or_mobile,
-            email_or_mobile,
-            password
+            email_or_mobile
         ))
 
         user = cursor.fetchone()
 
-        connection.close()
-
         if user:
-            session["user_id"] = user["id"]
-            session["user_name"] = user["name"]
-            session["user_email"] = user["email"]
 
-            return redirect(url_for("dashboard"))
+            stored_password = user["password"]
+            password_correct = False
+
+            # Check securely hashed password
+            try:
+                password_correct = check_password_hash(
+                    stored_password,
+                    password
+                )
+            except (ValueError, TypeError):
+                password_correct = False
+
+            # Support old accounts that were created
+            # before password hashing was added
+            if not password_correct and stored_password == password:
+
+                password_correct = True
+
+                new_hashed_password = generate_password_hash(
+                    password
+                )
+
+                cursor.execute("""
+                    UPDATE users
+                    SET password = ?
+                    WHERE id = ?
+                """, (
+                    new_hashed_password,
+                    user["id"]
+                ))
+
+                connection.commit()
+
+            if password_correct:
+                session.permanent = True
+                session["last_activity"] = time.time()
+                session["user_id"] = user["id"]
+                session["user_name"] = user["name"]
+                session["user_email"] = user["email"]
+
+                connection.close()
+
+                return redirect(url_for("dashboard"))
+
+        connection.close()
 
         message = "Invalid email/mobile number or password."
 
@@ -61,7 +159,41 @@ def login():
         "login.html",
         message=message
     )
+@app.route("/forgot-password", methods=["GET", "POST"])
+def forgot_password():
 
+    message = None
+
+    if request.method == "POST":
+
+        email_or_mobile = request.form.get("email", "").strip()
+
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        user = cursor.execute(
+            """
+            SELECT id, name, email, mobile
+            FROM users
+            WHERE email = ? OR mobile = ?
+            """,
+            (email_or_mobile, email_or_mobile)
+        ).fetchone()
+
+        connection.close()
+
+        if user:
+         return render_template(
+         "reset_password.html",
+         email=user["email"]
+        )
+        else:
+         message = "No account found with that email or mobile number."
+
+    return render_template(
+        "forgot_password.html",
+        message=message
+    )
 
 # ---------------- REGISTER ----------------
 @app.route("/register", methods=["GET", "POST"])
@@ -74,21 +206,58 @@ def register():
         name = request.form.get("name", "").strip()
         email = request.form.get("email", "").strip()
         mobile = request.form.get("mobile", "").strip()
+
         password = request.form.get("password", "")
-        confirm_password = request.form.get("confirm_password", "")
+        confirm_password = request.form.get(
+            "confirm_password",
+            ""
+        )
 
-        if password != confirm_password:
-            message = "Passwords do not match."
-            return render_template("register.html", message=message)
-
+        # Check empty fields
         if not name or not email or not mobile or not password:
+
             message = "Please fill in all fields."
-            return render_template("register.html", message=message)
+
+            return render_template(
+                "register.html",
+                message=message
+            )
+
+        # Check password confirmation
+        if password != confirm_password:
+
+            message = "Passwords do not match."
+
+            return render_template(
+                "register.html",
+                message=message
+            )
+
+        # Check password strength
+        if not is_valid_password(password):
+
+            message = (
+                "Password must contain 8-10 characters, "
+                "at least 1 uppercase letter, "
+                "1 lowercase letter, "
+                "1 number, and "
+                "1 special character."
+            )
+
+            return render_template(
+                "register.html",
+                message=message
+            )
 
         connection = get_db_connection()
         cursor = connection.cursor()
 
         try:
+
+            # Secure password hashing
+            hashed_password = generate_password_hash(
+                password
+            )
 
             cursor.execute("""
                 INSERT INTO users
@@ -97,7 +266,7 @@ def register():
             """, (
                 name,
                 email,
-                password,
+                hashed_password,
                 mobile
             ))
 
@@ -110,11 +279,60 @@ def register():
 
             connection.close()
 
-            message = "This email may already be registered."
+            message = (
+                "This email or mobile number "
+                "may already be registered."
+            )
 
     return render_template(
         "register.html",
         message=message
+    )
+# ---------------- RESET PASSWORD ----------------
+@app.route("/reset-password", methods=["GET", "POST"])
+def reset_password():
+
+    message = None
+
+    if request.method == "POST":
+
+        email = request.form.get("email", "").strip()
+        password = request.form.get("password", "")
+        confirm_password = request.form.get("confirm_password", "")
+
+        if password != confirm_password:
+
+            message = "Passwords do not match."
+
+            return render_template(
+                "reset_password.html",
+                email=email,
+                message=message
+            )
+
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        cursor.execute(
+            """
+            UPDATE users
+            SET password = ?
+            WHERE email = ?
+            """,
+            (password, email)
+        )
+
+        connection.commit()
+        connection.close()
+
+        return render_template(
+            "login.html",
+            message="Password reset successfully. Please login with your new password."
+        )
+
+    return render_template(
+        "reset_password.html",
+        email=""
     )
 # ---------------- ADMIN LOGIN ----------------
 @app.route("/admin-login", methods=["GET", "POST"])

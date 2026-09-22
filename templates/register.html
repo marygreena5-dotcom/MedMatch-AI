@@ -7,6 +7,7 @@
     <title>Create Account - MedMatch AI</title>
 
     <style>
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -72,6 +73,51 @@
             border-color: #667eea;
         }
 
+        .input-group {
+            position: relative;
+        }
+
+        .password-input {
+            padding-right: 45px;
+        }
+
+        .eye-btn {
+            position: absolute;
+            right: 12px;
+            top: 9px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 18px;
+            color: #777;
+        }
+
+        .eye-btn:hover {
+            color: #667eea;
+        }
+
+        /* Small error message below the related field */
+        .field-error {
+            display: none;
+            color: #d93025;
+            font-size: 12px;
+            margin-top: -8px;
+            margin-bottom: 14px;
+            line-height: 1.4;
+        }
+
+        /* Flask error message */
+        .server-error {
+            background: #fff0f0;
+            color: #d93025;
+            border: 1px solid #f0b5b5;
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-bottom: 18px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
         .register-btn {
             width: 100%;
             padding: 13px;
@@ -107,7 +153,9 @@
             margin-top: 18px;
             font-size: 11px;
             color: #888;
+            line-height: 1.5;
         }
+
     </style>
 </head>
 
@@ -123,18 +171,39 @@
             Join MedMatch AI
         </p>
 
-        <form method="POST" action="/register">
 
-            <label for="name">Full Name</label>
+        <!-- Flask backend message -->
+        {% if message %}
+            <div class="server-error">
+                {{ message }}
+            </div>
+        {% endif %}
+
+
+        <form method="POST"
+              action="/register"
+              onsubmit="return validateForm()">
+
+
+            <!-- Full Name -->
+            <label for="name">
+                Full Name
+            </label>
+
             <input
-               type="text"
-               id="name"
-               name="name"
-               placeholder="Enter your full name"
-               required
->
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Enter your full name"
+                required
+            >
 
-            <label for="email">Email Address</label>
+
+            <!-- Email -->
+            <label for="email">
+                Email Address
+            </label>
+
             <input
                 type="email"
                 id="email"
@@ -143,7 +212,12 @@
                 required
             >
 
-            <label for="mobile">Mobile Number</label>
+
+            <!-- Mobile -->
+            <label for="mobile">
+                Mobile Number
+            </label>
+
             <input
                 type="tel"
                 id="mobile"
@@ -152,42 +226,227 @@
                 required
             >
 
-            <label for="password">Password</label>
-            <input
-                type="password"
-                id="password"
-                name="password"
-                placeholder="Create a password"
-                required
-            >
 
-            <label for="confirm_password">Confirm Password</label>
-            <input
-                type="password"
-                id="confirm_password"
-                name="confirm_password"
-                placeholder="Confirm your password"
-                required
-            >
+            <!-- Password -->
+            <label for="password">
+                Password
+            </label>
 
-            <button type="submit" class="register-btn">
+            <div class="input-group">
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    class="password-input"
+                    placeholder="Create a password"
+                    minlength="8"
+                    maxlength="10"
+                    required
+                >
+
+                <button
+                    type="button"
+                    class="eye-btn"
+                    onclick="togglePassword('password', this)"
+                    aria-label="Show password"
+                >
+                    👁️
+                </button>
+
+            </div>
+
+            <!-- Password error appears HERE -->
+            <div
+                id="passwordError"
+                class="field-error"
+            ></div>
+
+
+            <!-- Confirm Password -->
+            <label for="confirm_password">
+                Confirm Password
+            </label>
+
+            <div class="input-group">
+
+                <input
+                    type="password"
+                    id="confirm_password"
+                    name="confirm_password"
+                    class="password-input"
+                    placeholder="Confirm your password"
+                    minlength="8"
+                    maxlength="10"
+                    required
+                >
+
+                <button
+                    type="button"
+                    class="eye-btn"
+                    onclick="togglePassword('confirm_password', this)"
+                    aria-label="Show password"
+                >
+                    👁️
+                </button>
+
+            </div>
+
+            <!-- Confirm password error appears HERE -->
+            <div
+                id="confirmError"
+                class="field-error"
+            ></div>
+
+
+            <!-- Create Account -->
+            <button
+                type="submit"
+                class="register-btn"
+            >
                 Create Account
             </button>
 
         </form>
 
+
         <div class="login-link">
+
             Already have an account?
-            <a href="/login">Login</a>
+
+            <a href="/login">
+                Login
+            </a>
+
         </div>
 
+
         <p class="note">
+
             MedMatch AI provides medicine information and availability
             support. Consult a qualified healthcare professional before
             changing medicines.
+
         </p>
 
     </div>
+
+
+    <script>
+
+        // ================================
+        // SHOW / HIDE PASSWORD
+        // ================================
+
+        function togglePassword(fieldId, button) {
+
+            const field =
+                document.getElementById(fieldId);
+
+            if (field.type === "password") {
+
+                field.type = "text";
+
+                button.textContent = "🙈";
+
+                button.setAttribute(
+                    "aria-label",
+                    "Hide password"
+                );
+
+            } else {
+
+                field.type = "password";
+
+                button.textContent = "👁️";
+
+                button.setAttribute(
+                    "aria-label",
+                    "Show password"
+                );
+            }
+        }
+
+
+        // ================================
+        // FORM VALIDATION
+        // ================================
+
+        function validateForm() {
+
+            const password =
+                document.getElementById("password").value;
+
+            const confirmPassword =
+                document.getElementById("confirm_password").value;
+
+            const passwordError =
+                document.getElementById("passwordError");
+
+            const confirmError =
+                document.getElementById("confirmError");
+
+
+            // Clear previous messages
+
+            passwordError.style.display = "none";
+            passwordError.textContent = "";
+
+            confirmError.style.display = "none";
+            confirmError.textContent = "";
+
+
+            // ================================
+            // PASSWORD CHECK
+            // ================================
+
+            const validPassword =
+
+                password.length >= 8 &&
+
+                password.length <= 10 &&
+
+                /[A-Z]/.test(password) &&
+
+                /[a-z]/.test(password) &&
+
+                /[0-9]/.test(password) &&
+
+                /[^A-Za-z0-9]/.test(password);
+
+
+            if (!validPassword) {
+
+                passwordError.textContent =
+                    "Use 8–10 characters with uppercase, lowercase, number, and a special character (e.g., @, #, *).";
+
+                passwordError.style.display = "block";
+
+                return false;
+            }
+
+
+            // ================================
+            // CONFIRM PASSWORD CHECK
+            // ================================
+
+            if (password !== confirmPassword) {
+
+                confirmError.textContent =
+                    "Passwords do not match.";
+
+                confirmError.style.display = "block";
+
+                return false;
+            }
+
+
+            // Everything is correct
+
+            return true;
+        }
+
+    </script>
 
 </body>
 </html>
