@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Dashboard - MedMatch AI</title>
 
     <style>
+
+        /* =========================
+           RESET
+        ========================== */
 
         * {
             box-sizing: border-box;
@@ -16,164 +22,270 @@
         }
 
         body {
-            background: #f4f7ff;
-            color: #243b64;
+            background: #f5f9ff;
+            color: #173b70;
         }
+
 
         /* =========================
-           NAVIGATION
+           TOP NAVBAR
         ========================== */
 
-        nav {
+        .topbar {
+            height: 72px;
             background: white;
-            padding: 10px 50px;
+
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            justify-content: space-between;
+
+            padding: 0 35px;
+
+            border-bottom: 1px solid #e3edfa;
+            box-shadow: 0 2px 12px rgba(40, 90, 150, 0.06);
+
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+
+            z-index: 100;
         }
 
-        /* Professional MedMatch AI Logo */
 
-        .logo {
+        /* =========================
+           BRAND
+        ========================== */
+
+        .brand {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            width: 48px;
+            height: 48px;
+
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center;
+
+            background: #eaf5ff;
+            border: 2px solid #d8ecff;
+        }
+
+        .brand-name {
             font-size: 25px;
             font-weight: 700;
-            color: #243b64;
+            color: #173b70;
         }
 
-        .logo-icon {
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #667eea, #4facfe);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 25px;
-            font-weight: bold;
+        .brand-name span {
+            color: #1877e8;
         }
 
-        .logo b {
-            color: #667eea;
-        }
 
-        .nav-right {
+        /* =========================
+           USER AREA
+        ========================== */
+
+        .user-area {
             display: flex;
             align-items: center;
             gap: 20px;
         }
 
-        .profile {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          color: #667085;
+        .welcome-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            color: #5d7394;
+            font-size: 14px;
         }
 
-        .profile-icon {
-          width: 34px;
-          height: 34px;
-          border-radius: 50%;
-          background: #eef2ff;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 18px;
+        .user-logo {
+            width: 38px;
+            height: 38px;
+
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center;
+
+            border: 2px solid #dceeff;
         }
 
         .logout {
+            color: #1877e8;
             text-decoration: none;
-            color: #667eea;
             font-weight: bold;
+
+            padding-left: 20px;
+            border-left: 1px solid #dce5ef;
         }
 
         .logout:hover {
-            text-decoration: underline;
+            color: #075dc5;
         }
 
 
         /* =========================
-           MAIN CONTAINER
+           SIDEBAR
         ========================== */
 
-        .container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 25px;
+        .sidebar {
+            position: fixed;
+
+            top: 72px;
+            left: 0;
+            bottom: 0;
+
+            width: 260px;
+
+            background: #f8fbff;
+            border-right: 1px solid #e3edfa;
+
+            padding: 25px 14px;
+
+            display: flex;
+            flex-direction: column;
+
+            overflow: hidden;
+
+            z-index: 90;
+        }
+
+
+        .side-title {
+            padding: 0 15px 15px;
+
+            color: #9aabc1;
+            font-size: 12px;
+
+            text-transform: uppercase;
+            letter-spacing: 1px;
+
+            font-weight: bold;
+
+            flex-shrink: 0;
         }
 
 
         /* =========================
-           WELCOME
+           SIDEBAR MENU
         ========================== */
 
-        .welcome {
-            margin-bottom: 35px;
-        }
+        .side-menu {
+            flex: 1;
 
-        .welcome h1 {
-            font-size: 32px;
-            margin-bottom: 8px;
-        }
+            overflow-y: auto;
 
-        .welcome p {
-            color: #667085;
-            font-size: 16px;
+            padding-right: 3px;
         }
 
 
-        /* =========================
-           CARDS
-        ========================== */
-
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 22px;
+        .side-menu::-webkit-scrollbar {
+            width: 5px;
         }
 
-        .card {
-            background: white;
-            padding: 28px;
-            border-radius: 16px;
-            box-shadow: 0 5px 18px rgba(0,0,0,0.07);
+        .side-menu::-webkit-scrollbar-thumb {
+            background: #b8cce2;
+            border-radius: 10px;
+        }
+
+
+        .side-link {
+            display: flex;
+            align-items: center;
+
+            gap: 15px;
+
+            padding: 14px 18px;
+
+            margin-bottom: 5px;
+
+            border-radius: 13px;
+
+            text-decoration: none;
+
+            color: #607795;
+
+            font-size: 14px;
+
             transition: 0.2s;
         }
 
-        .card:hover {
-            transform: translateY(-4px);
+
+        .side-link:hover {
+            background: #eaf4ff;
+            color: #1877e8;
+
+            transform: translateX(2px);
         }
 
-        .icon {
-            font-size: 38px;
-            margin-bottom: 15px;
-        }
 
-        .card h2 {
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
+        .side-link.active {
+            background: #e1f0ff;
+            color: #1877e8;
 
-        .card p {
-            color: #667085;
-            font-size: 14px;
-            line-height: 1.5;
-            margin-bottom: 18px;
-        }
-
-        .card a {
-            text-decoration: none;
-            color: #667eea;
             font-weight: bold;
-            font-size: 14px;
         }
 
-        .card a:hover {
-            text-decoration: underline;
+
+        .side-icon {
+            width: 24px;
+
+            text-align: center;
+
+            font-size: 20px;
+
+            flex-shrink: 0;
+        }
+
+
+        /* =========================
+           SIDEBAR BOTTOM
+        ========================== */
+
+        .side-bottom {
+            flex-shrink: 0;
+
+            text-align: center;
+
+            color: #1877e8;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            padding: 15px 5px 5px;
+
+            background: #f8fbff;
+        }
+
+
+        .side-bottom-line {
+            width: 45px;
+
+            height: 2px;
+
+            background: #65b3ff;
+
+            margin: 8px auto;
+        }
+
+
+        /* =========================
+           MAIN CONTENT
+        ========================== */
+
+        .main {
+            margin-left: 260px;
+
+            width: calc(100% - 260px);
+
+            padding: 105px 35px 40px;
         }
 
 
@@ -182,21 +294,317 @@
         ========================== */
 
         .notification {
-            background: #e8f7ee;
-            color: #26734d;
-            padding: 18px 22px;
+            background: #eaf8ef;
+
+            border: 1px solid #ccefd8;
+
+            color: #287548;
+
+            padding: 16px 20px;
+
             border-radius: 14px;
+
             margin-bottom: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.06);
         }
 
         .notification h2 {
-            margin-bottom: 8px;
-            color: #2e7d32;
+            font-size: 16px;
+            margin-bottom: 5px;
         }
 
         .notification p {
-            color: #444;
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           HERO SECTION
+        ========================== */
+
+        .hero {
+            min-height: 230px;
+
+            border-radius: 20px;
+
+            background: linear-gradient(
+                110deg,
+                #eaf6ff,
+                #dff1ff
+            );
+
+            border: 1px solid #d9ebfa;
+
+            padding: 35px 45px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            overflow: hidden;
+
+            margin-bottom: 28px;
+        }
+
+
+        .hero-text {
+            min-width: 0;
+        }
+
+
+        .hero-text h1 {
+            font-size: 21px;
+
+            color: #16457e;
+
+            margin-bottom: 6px;
+        }
+
+
+        .hero-text h2 {
+            font-size: 48px;
+
+            color: #1877e8;
+
+            margin-bottom: 12px;
+        }
+
+
+        .hero-text p {
+            color: #607795;
+
+            font-size: 17px;
+        }
+
+
+        .hero-subtext {
+            margin-top: 8px;
+
+            color: #7890aa !important;
+
+            font-size: 13px !important;
+        }
+
+
+        .hero-logo {
+            width: 170px;
+            height: 170px;
+
+            object-fit: cover;
+
+            border-radius: 50%;
+
+            flex-shrink: 0;
+        }
+
+
+        /* =========================
+           SECTION TITLE
+        ========================== */
+
+        .section-heading {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 15px;
+        }
+
+
+        .section-heading h2 {
+            font-size: 20px;
+
+            color: #16457e;
+        }
+
+
+        .section-heading p {
+            color: #8193aa;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           FEATURE CARDS
+        ========================== */
+
+        .cards {
+            display: grid;
+
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+
+            gap: 18px;
+
+            width: 100%;
+        }
+
+
+        .card {
+            min-width: 0;
+            width: 100%;
+
+            background: white;
+
+            border: 1px solid #e3edf8;
+
+            border-radius: 17px;
+
+            padding: 22px;
+
+            min-height: 155px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 17px;
+
+            box-shadow: 0 4px 15px rgba(40, 90, 150, 0.05);
+
+            transition: 0.25s;
+        }
+
+
+        .card:hover {
+            transform: translateY(-4px);
+
+            box-shadow: 0 9px 25px rgba(40, 90, 150, 0.11);
+
+            border-color: #cfe5fa;
+        }
+
+
+        /* =========================
+           CARD ICONS
+        ========================== */
+
+        .card-icon {
+            min-width: 62px;
+
+            width: 62px;
+
+            height: 62px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 27px;
+
+            font-weight: bold;
+
+            flex-shrink: 0;
+        }
+
+
+        .blue {
+            background: #e3f1ff;
+            color: #1877e8;
+        }
+
+
+        .purple {
+            background: #eee5ff;
+            color: #7750c9;
+        }
+
+
+        .green {
+            background: #ddf8ec;
+            color: #22915d;
+        }
+
+
+        .orange {
+            background: #fff0dc;
+            color: #e28a25;
+        }
+
+
+        .red {
+            background: #ffe5e8;
+            color: #d85c68;
+        }
+
+
+        .cyan {
+            background: #dcf8fa;
+            color: #1c9da7;
+        }
+
+
+        .card-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+
+        .card h2 {
+            font-size: 17px;
+
+            color: #16457e;
+
+            margin-bottom: 8px;
+        }
+
+
+        .card p {
+            color: #7286a1;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+
+            margin-bottom: 9px;
+        }
+
+
+        .card-link {
+            color: #1877e8;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+
+        .card-link:hover {
+            text-decoration: underline;
+        }
+
+
+        .arrow {
+            min-width: 34px;
+
+            width: 34px;
+
+            height: 34px;
+
+            border-radius: 50%;
+
+            background: #edf6ff;
+
+            color: #1877e8;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 18px;
+
+            flex-shrink: 0;
         }
 
 
@@ -205,25 +613,96 @@
         ========================== */
 
         .reminder {
-            margin-top: 35px;
+            margin-top: 22px;
+
             background: white;
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 5px 18px rgba(0,0,0,0.07);
+
+            border: 1px solid #e3edf8;
+
+            border-radius: 17px;
+
+            padding: 23px 25px;
+
+            box-shadow: 0 4px 15px rgba(40, 90, 150, 0.05);
         }
 
-        .reminder h2 {
-            margin-bottom: 15px;
+
+        .reminder-title {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            margin-bottom: 14px;
         }
+
+
+        .reminder-icon {
+            width: 40px;
+
+            height: 40px;
+
+            border-radius: 50%;
+
+            background: #fff0dc;
+
+            color: #e28a25;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 20px;
+        }
+
+
+        .reminder-title h2 {
+            font-size: 18px;
+
+            color: #16457e;
+        }
+
 
         .reminder p {
-            color: #667085;
-            margin-bottom: 8px;
+            color: #7286a1;
+
+            font-size: 14px;
+
+            margin-bottom: 7px;
         }
 
+
         .success-text {
-            margin-top: 10px;
-            color: #2e7d32 !important;
+            color: #2e8b57 !important;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           TABLET
+        ========================== */
+
+        @media (max-width: 1100px) {
+
+            .cards {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+
+            .hero-logo {
+                width: 150px;
+                height: 150px;
+            }
+
+
+            .hero-text h2 {
+                font-size: 40px;
+            }
+
         }
 
 
@@ -233,131 +712,425 @@
 
         @media (max-width: 800px) {
 
+            .sidebar {
+                width: 75px;
+
+                padding: 25px 8px;
+            }
+
+
+            .side-title,
+            .side-menu span:not(.side-icon),
+            .side-bottom {
+                display: none;
+            }
+
+
+            .side-link {
+                justify-content: center;
+
+                padding: 14px;
+            }
+
+
+            .main {
+                margin-left: 75px;
+
+                width: calc(100% - 75px);
+
+                padding: 95px 20px 30px;
+            }
+
+
+            .topbar {
+                padding: 0 18px;
+            }
+
+
+            .brand-name {
+                font-size: 19px;
+            }
+
+
+            .welcome-user {
+                font-size: 12px;
+            }
+
+
             .cards {
                 grid-template-columns: 1fr;
             }
 
-            nav {
-                padding: 12px 25px;
+
+            .hero {
+                padding: 28px;
             }
 
-            .logo {
-                font-size: 20px;
+
+            .hero-logo {
+                width: 120px;
+                height: 120px;
             }
 
-            .logo-icon {
-                width: 36px;
-                height: 36px;
-                font-size: 21px;
+
+            .hero-text h2 {
+                font-size: 32px;
             }
 
-            .nav-right {
+        }
+
+
+        /* =========================
+           SMALL MOBILE
+        ========================== */
+
+        @media (max-width: 550px) {
+
+            .hero-logo {
+                display: none;
+            }
+
+
+            .logout {
+                padding-left: 10px;
+            }
+
+
+            .user-area {
                 gap: 10px;
+            }
+
+
+            .brand-logo {
+                width: 40px;
+                height: 40px;
+            }
+
+
+            .brand-name {
+                font-size: 17px;
+            }
+
+
+            .user-logo {
+                display: none;
+            }
+
+
+            .hero-text h2 {
+                font-size: 28px;
+            }
+
+
+            .hero-text p {
+                font-size: 14px;
+            }
+
+
+            .section-heading {
+                display: block;
+            }
+
+
+            .section-heading p {
+                margin-top: 5px;
+            }
+
+
+            .card {
+                padding: 18px;
+            }
+
+
+            .card-icon {
+                width: 52px;
+                min-width: 52px;
+                height: 52px;
+                font-size: 23px;
+            }
+
+
+            .arrow {
+                display: none;
             }
 
         }
 
     </style>
+
 </head>
 
 
 <body>
 
 
-    <!-- =========================
-         NAVIGATION
-    ========================== -->
+<!-- =====================================================
+     TOP NAVIGATION
+====================================================== -->
 
-    <nav>
+<header class="topbar">
 
-        <div class="logo">
+    <div class="brand">
 
-            <div class="logo-icon">
-                ✚
-            </div>
+        <img
+            src="{{ url_for('static', filename='images/medmatch logo.png.png') }}"
+            alt="MedMatch AI Logo"
+            class="brand-logo"
+        >
 
-            <span>
-                MedMatch <b>AI</b>
-            </span>
+        <div class="brand-name">
+            MedMatch <span>AI</span>
+        </div>
+
+    </div>
+
+
+    <div class="user-area">
+
+        <div class="welcome-user">
+
+            <img
+                src="{{ url_for('static', filename='images/medmatch logo.png.png') }}"
+                alt="MedMatch AI"
+                class="user-logo"
+            >
+
+            Welcome, {{ session["user_name"] }}
 
         </div>
 
 
-        <div class="nav-right">
+        <a href="/" class="logout">
+            Logout
+        </a>
 
-            <span class="profile">
-              <span class="profile-icon">👤</span>
-              Welcome, {{ session["user_name"] }}
-            </span>
+    </div>
 
-            <a href="/" class="logout">
-                Logout
-            </a>
-
-        </div>
-
-    </nav>
+</header>
 
 
 
-    <!-- =========================
-         DASHBOARD
-    ========================== -->
+<!-- =====================================================
+     SIDEBAR
+====================================================== -->
 
-    <div class="container">
+<aside class="sidebar">
+
+    <div class="side-title">
+        Main Menu
+    </div>
 
 
-        <!-- Order Notification -->
+    <!-- SIDEBAR MENU -->
 
-        {% if notification %}
+    <div class="side-menu">
 
-        <div class="notification">
+
+        <a href="/dashboard" class="side-link active">
+
+            <span class="side-icon">⌂</span>
+
+            <span>Dashboard</span>
+
+        </a>
+
+
+        <a href="/search" class="side-link">
+
+            <span class="side-icon">⌕</span>
+
+            <span>Search Medicine</span>
+
+        </a>
+
+
+        <a href="/match" class="side-link">
+
+            <span class="side-icon">✦</span>
+
+            <span>AI Medicine Match</span>
+
+        </a>
+
+
+        <a href="/pharmacy" class="side-link">
+
+            <span class="side-icon">⌖</span>
+
+            <span>Pharmacy Finder</span>
+
+        </a>
+
+
+        <a href="/price" class="side-link">
+
+            <span class="side-icon">◇</span>
+
+            <span>Price Comparison</span>
+
+        </a>
+
+
+        <a href="/reminder" class="side-link">
+
+            <span class="side-icon">♧</span>
+
+            <span>Refill Reminder</span>
+
+        </a>
+
+
+        <a href="/medicine-info" class="side-link">
+
+            <span class="side-icon">ⓘ</span>
+
+            <span>Medicine Information</span>
+
+        </a>
+
+
+        <a href="/profile" class="side-link">
+
+            <span class="side-icon">○</span>
+
+            <span>My Profile</span>
+
+        </a>
+
+
+        <a href="/order" class="side-link">
+
+            <span class="side-icon">▣</span>
+
+            <span>Order Medicine</span>
+
+        </a>
+
+
+        <a href="/orders" class="side-link">
+
+            <span class="side-icon">▤</span>
+
+            <span>My Orders</span>
+
+        </a>
+
+
+    </div>
+
+
+    <!-- SIDEBAR BOTTOM -->
+
+    <div class="side-bottom">
+
+        <div class="side-bottom-line"></div>
+
+        MedMatch AI
+
+        <div class="side-bottom-line"></div>
+
+        Your Medicine Assistant
+
+    </div>
+
+</aside>
+
+
+
+<!-- =====================================================
+     MAIN CONTENT
+====================================================== -->
+
+<main class="main">
+
+
+    <!-- ORDER NOTIFICATION -->
+
+    {% if notification %}
+
+    <div class="notification">
+
+        <h2>
+            Order Notification
+        </h2>
+
+        <p>
+            {{ notification["message"] }}
+        </p>
+
+    </div>
+
+    {% endif %}
+
+
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div class="hero-text">
+
+            <h1>
+                Welcome to
+            </h1>
 
             <h2>
-                🔔 Order Notification
+                MedMatch AI
             </h2>
 
             <p>
-                {{ notification["message"] }}
+                Better Medicine. Better Health.
             </p>
 
-        </div>
-
-        {% endif %}
-
-
-
-        <!-- Welcome -->
-
-        <div class="welcome">
-
-            <h1>
-                Welcome to your Dashboard 👋
-            </h1>
-
-            <p>
-                Manage medicines, pharmacies, AI matching and refill reminders
-                from one place.
+            <p class="hero-subtext">
+                Your intelligent medicine assistance platform
             </p>
 
         </div>
 
 
+        <img
+            src="{{ url_for('static', filename='images/medmatch logo.png.png') }}"
+            alt="MedMatch AI"
+            class="hero-logo"
+        >
 
-        <!-- =========================
-             FEATURE CARDS
-        ========================== -->
-
-        <div class="cards">
+    </section>
 
 
-            <!-- Medicine Search -->
 
-            <div class="card">
+    <!-- QUICK ACCESS -->
 
-                <div class="icon">
-                    🔎
-                </div>
+    <div class="section-heading">
+
+        <div>
+            <h2>
+                Quick Access
+            </h2>
+        </div>
+
+        <p>
+            Choose a service to get started
+        </p>
+
+    </div>
+
+
+
+    <!-- FEATURE CARDS -->
+
+    <div class="cards">
+
+
+        <!-- Medicine Search -->
+
+        <div class="card">
+
+            <div class="card-icon blue">
+                ⌕
+            </div>
+
+            <div class="card-content">
 
                 <h2>
                     Medicine Search
@@ -367,46 +1140,61 @@
                     Search for medicines and check their availability.
                 </p>
 
-                <a href="/search">
+                <a href="/search" class="card-link">
                     Search Medicine →
                 </a>
 
             </div>
 
+            <div class="arrow">
+                →
+            </div>
+
+        </div>
 
 
-            <!-- AI Medicine Match -->
 
-            <div class="card">
+        <!-- AI Match -->
 
-                <div class="icon">
-                    🤖
-                </div>
+        <div class="card">
+
+            <div class="card-icon purple">
+                ✦
+            </div>
+
+            <div class="card-content">
 
                 <h2>
                     AI Medicine Match
                 </h2>
 
                 <p>
-                    Find potentially similar medicines from our verified
-                    medicine database.
+                    Find potentially similar medicines from our verified database.
                 </p>
 
-                <a href="/match">
+                <a href="/match" class="card-link">
                     Find Alternatives →
                 </a>
 
             </div>
 
+            <div class="arrow">
+                →
+            </div>
+
+        </div>
 
 
-            <!-- Pharmacy Finder -->
 
-            <div class="card">
+        <!-- Pharmacy -->
 
-                <div class="icon">
-                    🏥
-                </div>
+        <div class="card">
+
+            <div class="card-icon green">
+                ⌖
+            </div>
+
+            <div class="card-content">
 
                 <h2>
                     Pharmacy Finder
@@ -416,21 +1204,29 @@
                     View pharmacies and check medicine stock availability.
                 </p>
 
-                <a href="/pharmacy">
+                <a href="/pharmacy" class="card-link">
                     Find Pharmacy →
                 </a>
 
             </div>
 
+            <div class="arrow">
+                →
+            </div>
+
+        </div>
 
 
-            <!-- Price Comparison -->
 
-            <div class="card">
+        <!-- Price Comparison -->
 
-                <div class="icon">
-                    💰
-                </div>
+        <div class="card">
+
+            <div class="card-icon orange">
+                ◇
+            </div>
+
+            <div class="card-content">
 
                 <h2>
                     Price Comparison
@@ -440,21 +1236,29 @@
                     Compare medicine prices across available pharmacies.
                 </p>
 
-                <a href="/price">
+                <a href="/price" class="card-link">
                     Compare Prices →
                 </a>
 
             </div>
 
+            <div class="arrow">
+                →
+            </div>
+
+        </div>
 
 
-            <!-- Refill Reminder -->
 
-            <div class="card">
+        <!-- Refill Reminder -->
 
-                <div class="icon">
-                    🔔
-                </div>
+        <div class="card">
+
+            <div class="card-icon red">
+                ♧
+            </div>
+
+            <div class="card-content">
 
                 <h2>
                     Refill Reminder
@@ -464,46 +1268,61 @@
                     Manage reminders for your upcoming medicine refills.
                 </p>
 
-                <a href="/reminder">
+                <a href="/reminder" class="card-link">
                     Set Reminder →
                 </a>
 
             </div>
 
+            <div class="arrow">
+                →
+            </div>
+
+        </div>
 
 
-            <!-- Medicine Information -->
 
-            <div class="card">
+        <!-- Medicine Information -->
 
-                <div class="icon">
-                    💊
-                </div>
+        <div class="card">
+
+            <div class="card-icon cyan">
+                ◈
+            </div>
+
+            <div class="card-content">
 
                 <h2>
                     Medicine Information
                 </h2>
 
                 <p>
-                    Get simple information about medicines from our
-                    demo medicine database.
+                    Get simple information about medicines from our database.
                 </p>
 
-                <a href="/medicine-info">
+                <a href="/medicine-info" class="card-link">
                     View Information →
                 </a>
 
             </div>
 
+            <div class="arrow">
+                →
+            </div>
+
+        </div>
 
 
-            <!-- My Profile -->
 
-            <div class="card">
+        <!-- Profile -->
 
-                <div class="icon">
-                    👤
-                </div>
+        <div class="card">
+
+            <div class="card-icon purple">
+                ○
+            </div>
+
+            <div class="card-content">
 
                 <h2>
                     My Profile
@@ -513,101 +1332,79 @@
                     View and manage your MedMatch AI account information.
                 </p>
 
-                <a href="/profile">
+                <a href="/profile" class="card-link">
                     View Profile →
                 </a>
 
             </div>
 
-
-
-            <!-- Order Medicine -->
-
-            <div class="card">
-
-                <div class="icon">
-                    🛒
-                </div>
-
-                <h2>
-                    Order Medicine
-                </h2>
-
-                <p>
-                    Select a pharmacy, choose your medicine quantity
-                    and place an order.
-                </p>
-
-                <a href="/order">
-                    Order Medicine →
-                </a>
-
-            </div>
-
-
-
-            <!-- My Orders -->
-
-            <div class="card">
-
-                <div class="icon">
-                    📋
-                </div>
-
-                <h2>
-                    My Orders
-                </h2>
-
-                <p>
-                    View your previous medicine orders and
-                    check their current status.
-                </p>
-
-                <a href="/orders">
-                    View My Orders →
-                </a>
-
+            <div class="arrow">
+                →
             </div>
 
         </div>
 
 
 
-        <!-- =========================
-             UPCOMING REMINDER
-        ========================== -->
+        <!-- Order Medicine -->
 
-        <div class="reminder">
+        <div class="card">
 
-            <h2>
-                🔔 Upcoming Reminder
-            </h2>
+            <div class="card-icon blue">
+                ▣
+            </div>
 
+            <div class="card-content">
 
-            {% if reminder %}
-
-                <p>
-                    💊 Medicine:
-                    <strong>{{ reminder["medicine"] }}</strong>
-                </p>
+                <h2>
+                    Order Medicine
+                </h2>
 
                 <p>
-                    📅 Refill Date:
-                    <strong>{{ reminder["date"] }}</strong>
+                    Select a pharmacy, choose your medicine quantity and place an order.
                 </p>
 
-                <p class="success-text">
-                    ✅ Reminder is saved successfully.
-                </p>
+                <a href="/order" class="card-link">
+                    Order Medicine →
+                </a>
 
-            {% else %}
+            </div>
+
+            <div class="arrow">
+                →
+            </div>
+
+        </div>
+
+
+
+        <!-- My Orders -->
+
+        <div class="card">
+
+            <div class="card-icon purple">
+                ▤
+            </div>
+
+            <div class="card-content">
+
+                <h2>
+                    My Orders
+                </h2>
 
                 <p>
-                    No medicine refill reminders yet.
-                    Add a reminder when you need one.
+                    View your previous medicine orders and check their current status.
                 </p>
 
-            {% endif %}
+                <a href="/orders" class="card-link">
+                    View My Orders →
+                </a>
+
+            </div>
+
+            <div class="arrow">
+                →
+            </div>
 
         </div>
 
@@ -615,5 +1412,55 @@
     </div>
 
 
+
+    <!-- UPCOMING REMINDER -->
+
+    <div class="reminder">
+
+        <div class="reminder-title">
+
+            <div class="reminder-icon">
+                🔔
+            </div>
+
+            <h2>
+                Upcoming Reminder
+            </h2>
+
+        </div>
+
+
+        {% if reminder %}
+
+            <p>
+                Medicine:
+                <strong>{{ reminder["medicine"] }}</strong>
+            </p>
+
+            <p>
+                Refill Date:
+                <strong>{{ reminder["date"] }}</strong>
+            </p>
+
+            <p class="success-text">
+                Reminder is saved successfully.
+            </p>
+
+        {% else %}
+
+            <p>
+                No medicine refill reminders yet.
+                Add a reminder when you need one.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+</main>
+
+
 </body>
+
 </html>

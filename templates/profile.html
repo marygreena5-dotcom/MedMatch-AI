@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>MedMatch AI - My Profile</title>
 
     <style>
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -17,6 +20,7 @@
         body {
             background: #f4f7ff;
             color: #243b64;
+            min-height: 100vh;
         }
 
         .container {
@@ -29,18 +33,42 @@
             background: white;
             padding: 35px;
             border-radius: 18px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
         }
 
-        .profile-icon {
-            text-align: center;
-            font-size: 70px;
-            margin-bottom: 15px;
+        /* =========================
+           PROFILE LOGO
+        ========================== */
+
+        .profile-logo {
+            width: 105px;
+            height: 105px;
+            margin: 0 auto 20px;
+
+            border-radius: 50%;
+
+            background: linear-gradient(135deg, #4f7cff, #3159c9);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            box-shadow: 0 8px 20px rgba(79, 124, 255, 0.25);
         }
+
+        .profile-logo svg {
+            width: 62px;
+            height: 62px;
+        }
+
+        /* =========================
+           TITLE
+        ========================== */
 
         h1 {
             text-align: center;
             margin-bottom: 10px;
+            color: #243b64;
         }
 
         .subtitle {
@@ -49,11 +77,19 @@
             margin-bottom: 30px;
         }
 
+        /* =========================
+           INFORMATION
+        ========================== */
+
         .info {
             margin-bottom: 18px;
             padding: 15px;
+
             background: #f8f9ff;
+
             border-radius: 10px;
+
+            border: 1px solid #e8ecf7;
         }
 
         .info strong {
@@ -62,16 +98,69 @@
             color: #4b5f88;
         }
 
+        .info span {
+            color: #243b64;
+        }
+
+        /* =========================
+           BACK BUTTON
+        ========================== */
+
         .back {
             display: block;
+
             text-align: center;
+
             margin-top: 25px;
+            padding: 12px;
+
             text-decoration: none;
-            color: #667eea;
+
+            color: white;
+
+            background: #4f7cff;
+
+            border-radius: 10px;
+
             font-weight: bold;
+
+            transition: 0.2s;
         }
+
+        .back:hover {
+            background: #3159c9;
+        }
+
+        /* =========================
+           MOBILE
+        ========================== */
+
+        @media (max-width: 600px) {
+
+            .container {
+                margin: 25px auto;
+                padding: 0 15px;
+            }
+
+            .profile-card {
+                padding: 28px 20px;
+            }
+
+            .profile-logo {
+                width: 90px;
+                height: 90px;
+            }
+
+            .profile-logo svg {
+                width: 55px;
+                height: 55px;
+            }
+        }
+
     </style>
+
 </head>
+
 
 <body>
 
@@ -79,35 +168,129 @@
 
     <div class="profile-card">
 
-        <div class="profile-icon">
-            👤
+        <!-- =========================
+             UNIQUE USER PROFILE LOGO
+        ========================== -->
+
+        <div class="profile-logo">
+
+            <svg
+                viewBox="0 0 64 64"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-label="User Profile"
+            >
+
+                <!-- Head -->
+                <circle
+                    cx="32"
+                    cy="21"
+                    r="10"
+                    fill="white"
+                />
+
+                <!-- Shoulders -->
+                <path
+                    d="M13 53
+                       C14.5 41
+                       21.5 35
+                       32 35
+                       C42.5 35
+                       49.5 41
+                       51 53
+                       Z"
+                    fill="white"
+                />
+
+            </svg>
+
         </div>
 
-        <h1>My Profile</h1>
+
+        <!-- =========================
+             TITLE
+        ========================== -->
+
+        <h1>
+            My Profile
+        </h1>
+
 
         <p class="subtitle">
             Your MedMatch AI account information
         </p>
 
-        <div class="info">
-            <strong>👤 Name</strong>
-             {{ user["name"] }}
-        </div>
+
+        <!-- =========================
+             NAME
+        ========================== -->
 
         <div class="info">
-            <strong>📧 Email</strong>
-             {{ user["email"] }}
+
+            <strong>
+                👤 Name
+            </strong>
+
+            <span>
+                {{ user["name"] }}
+            </span>
+
         </div>
 
-        <div class="info">
-            <strong>📱 Mobile</strong>
-            {{ user["mobile"] }}
-        </div>
+
+        <!-- =========================
+             EMAIL
+        ========================== -->
 
         <div class="info">
-            <strong>💊 Account Type</strong>
-            MedMatch AI User
+
+            <strong>
+                📧 Email
+            </strong>
+
+            <span>
+                {{ user["email"] }}
+            </span>
+
         </div>
+
+
+        <!-- =========================
+             MOBILE
+        ========================== -->
+
+        <div class="info">
+
+            <strong>
+                📱 Mobile
+            </strong>
+
+            <span>
+                {{ user["mobile"] }}
+            </span>
+
+        </div>
+
+
+        <!-- =========================
+             ACCOUNT TYPE
+        ========================== -->
+
+        <div class="info">
+
+            <strong>
+                💊 Account Type
+            </strong>
+
+            <span>
+                MedMatch AI User
+            </span>
+
+        </div>
+
+
+        <!-- =========================
+             BACK TO DASHBOARD
+        ========================== -->
 
         <a href="/dashboard" class="back">
             ← Back to Dashboard
@@ -118,4 +301,5 @@
 </div>
 
 </body>
+
 </html>
